@@ -125,3 +125,11 @@ For callback and functions, you can use `@callback`:
  * @returns {number}
  */
 ```
+
+## @type Annotation
+```
+/** @type {number} */
+const count = 1;
+/** @type {MyObject} */
+const obj;
+```
