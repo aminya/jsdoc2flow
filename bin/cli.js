@@ -9,12 +9,23 @@ const path = require('path');
 const program = require('commander');
 const packageJson = require('../package.json');
 
+function collect(val, list) {
+    list.push(val);
+    return list;
+}
+
 program
     .version(packageJson.version)
     .option('-f, --file <file>', 'The file to convert and output to stdout')
     .option('-i, --input-directory <dir>', 'Source directory for original files')
     .option('-o, --output-directory <dir>', 'Destination directory for converted files')
+    .option('--ext [ext]', 'File extension to convert. Can specify multiple extensions. Defaults to \'js\' only.', collect, [])
     .parse(process.argv);
+
+if (program.ext.length === 0) {
+    program.ext.push('.js');
+}
+program.ext = program.ext.map(e => e.startsWith('.') ? e : '.' + e);
 
 const Converter = require('../src');
 const converter = new Converter();
@@ -36,10 +47,11 @@ else if (program.inputDirectory && program.outputDirectory) {
         for (const entry of entries) {
             const entryPath = path.join(basePath, entry);
             const entryInfo = fs.lstatSync(entryPath);
+            const entryPathObj = path.parse(entryPath);
             if (entryInfo.isDirectory()) {
                 stack.push(entryPath);
             }
-            else {
+            else if (program.ext.includes(entryPathObj.ext)) {
                 const newPath = path.join(program.outputDirectory,
                     entryPath.replace(resolvedInputDir, ''));
                 fs.mkdirsSync(path.parse(newPath).dir);
