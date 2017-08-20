@@ -11,8 +11,9 @@ const e = exports;
  * @param {object} obj.c
  * @param {object=} obj.d
  * @param {object=} obj.e
+ * @returns {number}
  */
-e.fn1 = ({a /*: string */, b /*: string */, c /*: object */, d /*: ?object */, e /*: ?object */}) => {
+e.fn1 = ({a /*: string */, b /*: string */, c /*: object */, d /*: ?object */, e /*: ?object */}) /*: number */ => {
 };
 
 /**
@@ -24,8 +25,9 @@ e.fn1 = ({a /*: string */, b /*: string */, c /*: object */, d /*: ?object */, e
  * @param {object} obj.c
  * @param {object=} obj.d
  * @param {object=} obj.e
+ * @returns {number}
  */
-e.fn2 = ({a /*: string */, b /*: string */, c /*: object */, d /*: ?object */, e /*: ?object */}) => {
+e.fn2 = ({a /*: string */, b /*: string */, c /*: object */, d /*: ?object */, e /*: ?object */}) /*: number */ => {
 };
 
 /**
@@ -36,6 +38,7 @@ e.fn2 = ({a /*: string */, b /*: string */, c /*: object */, d /*: ?object */, e
  * @param {string} obj.b
  * @param {object=} obj.c
  * @param {object=} obj.d
+ * @returns {number}
  */
-e.fn3 = ({a /*: string */, b /*: string */, c /*: ?object */, d /*: ?object */}) => {
+e.fn3 = ({a /*: string */, b /*: string */, c /*: ?object */, d /*: ?object */}) /*: number */ => {
 };

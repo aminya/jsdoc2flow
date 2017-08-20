@@ -11,6 +11,7 @@ const e = exports;
  * @param {object} obj.c
  * @param {object=} obj.d
  * @param {object=} obj.e
+ * @returns {number}
  */
 e.fn1 = ({a, b, c, d, e}) => {
 };
@@ -24,6 +25,7 @@ e.fn1 = ({a, b, c, d, e}) => {
  * @param {object} obj.c
  * @param {object=} obj.d
  * @param {object=} obj.e
+ * @returns {number}
  */
 e.fn2 = ({a, b, c, d, e}) => {
 };
@@ -36,6 +38,7 @@ e.fn2 = ({a, b, c, d, e}) => {
  * @param {string} obj.b
  * @param {object=} obj.c
  * @param {object=} obj.d
+ * @returns {number}
  */
 e.fn3 = ({a, b, c, d}) => {
 };

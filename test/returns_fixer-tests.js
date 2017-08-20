@@ -96,6 +96,26 @@ describe('returnsFixer', function() {
         });
     });
 
+    describe('return type of ArrowFunctionExpression in an ExpressionStatement', function() {
+        it('should work', function() {
+            const code = `
+            /**
+             * @returns {number}
+             */
+            Something.prototype.test = () => {
+            }
+            `;
+            const modifiedCode = converter.convertSourceCode(code);
+            modifiedCode.should.be.eql(`
+            /**
+             * @returns {number}
+             */
+            Something.prototype.test = () /*: number */ => {
+            }
+            `);
+        });
+    });
+
     describe('return type of FunctionExpression in an ExpressionStatement', function() {
         it('should work', function() {
             const code = `

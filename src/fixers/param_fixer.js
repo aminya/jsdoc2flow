@@ -49,8 +49,8 @@ class ParamFixer {
         }
         else if (node.type === 'ExpressionStatement') {
             if (node.expression.type !== 'AssignmentExpression' ||
-                node.expression.right.type !== 'FunctionExpression' &&
-                node.expression.right.type !== 'ArrowFunctionExpression') {
+                (node.expression.right.type !== 'FunctionExpression' &&
+                 node.expression.right.type !== 'ArrowFunctionExpression')) {
                 return fixes;
             }
             params = node.expression.right.params;
