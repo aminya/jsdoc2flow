@@ -1,7 +1,7 @@
 {
   "name": "jsdoc2flow",
-  "version": "1.0.0",
-  "description": "Reads JSDoc comments and inserts corresponding Flow comments",
+  "version": "0.1.0",
+  "description": "Reads JSDoc comments and inserts corresponding Flow annotations",
   "main": "src/index.js",
   "scripts": {
     "test": "mocha \"test/**/*-tests.js\"",
