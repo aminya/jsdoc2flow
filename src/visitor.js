@@ -35,6 +35,8 @@ class Visitor {
                 return `${p1}${p2}`;
             });
 
+            let processedComment = false;
+
             const result = doctrine.parse(commentValue, { unwrap: true });
             const tags = result.tags;
             for (const tag of tags) {
@@ -48,7 +50,16 @@ class Visitor {
                     code: this.sourceCode,
                     tags: tags
                 };
-                fixes = _.concat(fixes, fixer.getFixes(tag, node, context));
+                const newFixes = fixer.getFixes(tag, node, context);
+                fixes = _.concat(fixes, newFixes);
+
+                if (newFixes.length) {
+                    processedComment = true;
+                }
+            }
+
+            if (processedComment) {
+                this.visitedComments.push(comment);
             }
         }
 
