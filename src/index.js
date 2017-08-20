@@ -65,7 +65,9 @@ class Converter {
                 const prop = node[key];
                 if (Array.isArray(prop)) {
                     for (let i = prop.length - 1; i >= 0; i--) {
-                        stack.push(prop[i]);
+                        if (prop[i]) {
+                            stack.push(prop[i]);
+                        }
                     }
                 }
                 else if (prop) {
