@@ -5,10 +5,15 @@ class TypeFixer {
         this.flowAnnotation = flowAnnotation;
     }
 
-    getFixes(tag, node) {
+    getFixes(tag, node, { comment }) {
         const fixes = [];
 
         if (node.type != 'VariableDeclaration') {
+            return fixes;
+        }
+
+        // @type always applies to things that come after it
+        if (node.trailingComments && node.trailingComments.includes(comment)) {
             return fixes;
         }
 

@@ -19,4 +19,20 @@ describe('typeFixer', function() {
             `);
         });
     });
+
+    describe('specify type between variable declarations', function() {
+        it('should not get confused', function() {
+            const code = `
+            const var1 = 2;
+            /** @type {number} */
+            const count = 1;
+            `;
+            const modifiedCode = converter.convertSourceCode(code);
+            modifiedCode.should.be.eql(`
+            const var1 = 2;
+            /** @type {number} */
+            const count /*: number */ = 1;
+            `);
+        });
+    });
 });
