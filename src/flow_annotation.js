@@ -6,10 +6,9 @@ function determineVarType(varType) {
     }
     else if (varType.type === 'TypeApplication') {
         if (varType.expression.type === 'NameExpression' &&
-            varType.expression.name === 'Array' &&
-            varType.applications.length === 1 &&
-            varType.applications[0].type === 'NameExpression') {
-            return `Array<${varType.applications[0].name}>`;
+            varType.applications.every(a => a.type === 'NameExpression')) {
+            const innerTypes = varType.applications.map(a => a.name).join(',');
+            return `${varType.expression.name}<${innerTypes}>`;
         }
     }
     else if (varType.type === 'OptionalType' || varType.type === 'NullableType') {

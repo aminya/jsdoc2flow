@@ -199,4 +199,24 @@ describe('returnsFixer', function() {
             `);
         });
     });
+
+    describe('Promise return type', function() {
+        it('should work but does not change anything', function() {
+            const code = `
+            /**
+             * @returns {Promise<number>}
+             */
+            function test() {
+            };
+            `;
+            const modifiedCode = converter.convertSourceCode(code);
+            modifiedCode.should.be.eql(`
+            /**
+             * @returns {Promise<number>}
+             */
+            function test() /*: Promise<number> */ {
+            };
+            `);
+        });
+    });
 });
