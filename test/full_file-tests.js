@@ -18,4 +18,13 @@ describe('full file', function() {
             modifiedCode.should.be.eql(expected);
         });
     });
+
+    describe('test2', function() {
+        it('should convert correctly', function() {
+            const code = fs.readFileSync(`${orig}/test2.js`).toString();
+            const modifiedCode = converter.convertSourceCode(code);
+            const expected = fs.readFileSync(`${annotated}/test2.js`).toString();
+            modifiedCode.should.be.eql(expected);
+        });
+    });
 });

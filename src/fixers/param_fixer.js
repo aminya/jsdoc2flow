@@ -7,11 +7,16 @@ class ParamFixer {
         this.flowAnnotation = flowAnnotation;
     }
 
-    getFixes(tag, node) {
+    getFixes(tag, node, { comment }) {
         const fixes = [];
 
         let tagName = tag.name;
         let params = node.params;
+
+        // @param always applies to things that come after it
+        if (node.trailingComments && node.trailingComments.includes(comment)) {
+            return fixes;
+        }
 
         // @param can only be applied to FunctionDeclaration, or a
         // FunctionExpression that might be embedded within a VariableDeclaration

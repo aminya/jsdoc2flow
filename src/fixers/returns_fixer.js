@@ -5,8 +5,13 @@ class ReturnsFixer {
         this.flowAnnotation = flowAnnotation;
     }
 
-    getFixes(tag, node, { code }) {
+    getFixes(tag, node, { code, comment }) {
         const fixes = [];
+
+        // @returns always applies to things that come after it
+        if (node.trailingComments && node.trailingComments.includes(comment)) {
+            return fixes;
+        }
 
         // @returns can only be applied to FunctionDeclaration, or a
         // FunctionExpression that might be embedded within a VariableDeclaration
