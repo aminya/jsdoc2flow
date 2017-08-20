@@ -15,7 +15,8 @@ describe('callbackFixer', function() {
              */
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`            /*::
+            modifiedCode.should.be.eql(`
+            /*::
             type MyCallback = (arg1: number) => void;
             */
             /**
@@ -36,7 +37,8 @@ describe('callbackFixer', function() {
              */
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`            /*::
+            modifiedCode.should.be.eql(`
+            /*::
             type MyCallback = (arg1: number) => number;
             */
             /**

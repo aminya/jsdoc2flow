@@ -73,7 +73,7 @@ class FlowAnnotation {
             const returnType = returnTag ? determineVarType(returnTag.type) : 'void';
             const lines = [];
             const props = [];
-            lines.push(`${indent}${this.blockPre}`);
+            lines.push(`${this.blockPre}`);
             for (const property of properties) {
                 const propType = determineVarType(property.type);
                 props.push(`${property.name}: ${propType}`);
@@ -82,7 +82,7 @@ class FlowAnnotation {
             lines.push(`${indent}${this.blockPost}`);
             return {
                 start: start,
-                addition: lines.join('\n')
+                addition: lines.join('\n') + `\n${indent}`
             };
         }
         else {
@@ -90,7 +90,7 @@ class FlowAnnotation {
             if (type.toLowerCase() === 'object' && properties.length) {
                 const lines = [];
                 const propLines = [];
-                lines.push(`${indent}${this.blockPre}`);
+                lines.push(`${this.blockPre}`);
                 lines.push(`${indent}type ${name} = {`);
                 for (const property of properties) {
                     const propType = determineVarType(property.type);
@@ -101,17 +101,17 @@ class FlowAnnotation {
                 lines.push(`${indent}${this.blockPost}`);
                 return {
                     start: start,
-                    addition: lines.join('\n')
+                    addition: lines.join('\n') + `\n${indent}`
                 };
             }
             else {
                 return {
                     start: start,
                     addition: [
-                        `${indent}${this.blockPre}`,
+                        `${this.blockPre}`,
                         `${indent}type ${name} = ${type};`,
                         `${indent}${this.blockPost}`
-                    ].join('\n')
+                    ].join('\n') + `\n${indent}`
                 };
             }
         }

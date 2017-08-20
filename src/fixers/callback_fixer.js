@@ -28,7 +28,7 @@ class CallbackFixer {
         if (returnTags.length > 1) {
             throw new Error('@callback encountered multiple return types');
         }
-        fixes.push(this.flowAnnotation.alias(node.start, indent, tag.title, tag.description, null, params, returnTags[0]));
+        fixes.push(this.flowAnnotation.alias(comment.start, indent, tag.title, tag.description, null, params, returnTags[0]));
 
         return fixes;
     }

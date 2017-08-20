@@ -14,7 +14,8 @@ describe('typedefFixer', function() {
              */
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`            /*::
+            modifiedCode.should.be.eql(`
+            /*::
             type MyNumber = number;
             */
             /**
@@ -32,7 +33,8 @@ describe('typedefFixer', function() {
              */
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`            /*::
+            modifiedCode.should.be.eql(`
+            /*::
             type MyUnion = number | boolean;
             */
             /**
@@ -52,7 +54,8 @@ describe('typedefFixer', function() {
              */
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`            /*::
+            modifiedCode.should.be.eql(`
+            /*::
             type MyObject = {
               prop1: boolean,
               prop2: boolean
