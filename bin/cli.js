@@ -58,12 +58,18 @@ else if (program.inputDirectory && program.outputDirectory) {
             if (entryInfo.isDirectory()) {
                 stack.push(entryPath);
             }
-            else if (program.ext.includes(entryPathObj.ext)) {
+            else {
                 const newPath = path.join(program.outputDirectory,
                     entryPath.replace(resolvedInputDir, ''));
                 fs.mkdirsSync(path.parse(newPath).dir);
-                log(`Convert ${entryPath} to ${newPath}`);
-                converter.convertFile(entryPath, newPath);
+                if (program.ext.includes(entryPathObj.ext)) {
+                    log(`Convert ${entryPath} to ${newPath}`);
+                    converter.convertFile(entryPath, newPath);
+                }
+                else {
+                    log(`Copy ${entryPath} to ${newPath}`);
+                    fs.copySync(entryPath, newPath);
+                }
             }
         }
     }
