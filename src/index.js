@@ -24,6 +24,16 @@ class Converter {
     }
 
     convertSourceCode(code) {
+        // Check to see if this code is being used as a script.
+        // i.e. first line having something like `#!/usr/bin/env node`
+        //
+        // If it is, strip it out before trying to parse it.
+        const regExp = /^(#![^\n]+\n)/;
+        const matches = code.match(regExp);
+        if (matches) {
+            code = code.replace(regExp, '');
+        }
+
         const ast = espree.parse(code, this.espreeOptions);
 
         const scope = this.container.createScope();
@@ -33,7 +43,11 @@ class Converter {
         let fixes = [];
         this._traverseAST(ast, n => fixes = _.concat(fixes, visitor.visit(n)));
 
-        const modifiedCode = this._applyFixes(code, fixes);
+        let modifiedCode = this._applyFixes(code, fixes);
+        if (matches) {
+            // Put back the first line if it was stripped out before.
+            modifiedCode = `${matches[1]}${modifiedCode}`;
+        }
         return modifiedCode;
     }
 
