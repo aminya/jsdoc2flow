@@ -130,6 +130,30 @@ describe('paramFixer', function() {
         });
     });
 
+    describe('arrow function with destructuring assigned to var', function() {
+        it('should work', function() {
+            const code = `
+            /**
+             * @param {object} obj
+             * @param {number} obj.a
+             * @param {number} obj.b
+             */
+            e.test = ({ a, b }) => {
+            };
+            `;
+            const modifiedCode = converter.convertSourceCode(code);
+            modifiedCode.should.be.eql(`
+            /**
+             * @param {object} obj
+             * @param {number} obj.a
+             * @param {number} obj.b
+             */
+            e.test = ({ a /*: number */, b /*: number */ }) => {
+            };
+            `);
+        });
+    });
+
     describe('simple name for arrow function without brackets', function() {
         it('should work', function() {
             const code = `
