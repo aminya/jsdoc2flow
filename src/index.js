@@ -21,6 +21,10 @@ class Converter {
         const code = fs.readFileSync(inputFilePath).toString();
         const modifiedCode = this.convertSourceCode(code);
         fs.writeFileSync(outputFilePath, modifiedCode);
+
+        // Retain the same permissions
+        const fstat = fs.lstatSync(inputFilePath);
+        fs.chmodSync(outputFilePath, fstat.mode);
     }
 
     convertSourceCode(code) {
