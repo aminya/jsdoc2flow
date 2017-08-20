@@ -42,10 +42,14 @@ class FlowAnnotation {
         if (useFlowCommentSyntax) {
             this.inlinePre = ' /*';
             this.inlinePost = ' */';
+            this.blockPre = '/*::';
+            this.blockPost = '*/';
         }
         else {
             this.inlinePre = '';
             this.inlinePost = '';
+            this.blockPre = '';
+            this.blockPost = '';
         }
     }
 
@@ -62,6 +66,37 @@ class FlowAnnotation {
             start: start,
             addition: addition
         };
+    }
+
+    alias(start, indent, name, varType, properties) {
+        const type = determineVarType(varType);
+        if (type.toLowerCase() === 'object' && properties.length) {
+            const lines = [];
+            const propLines = [];
+            lines.push(`${indent}${this.blockPre}`);
+            lines.push(`${indent}type ${name} = {`);
+            for (const property of properties) {
+                const propType = determineVarType(property.type);
+                propLines.push(`${indent}  ${property.name}: ${propType}`);
+            }
+            lines.push(propLines.join(',\n'));
+            lines.push(`${indent}};`);
+            lines.push(`${indent}${this.blockPost}`);
+            return {
+                start: start,
+                addition: lines.join('\n')
+            };
+        }
+        else {
+            return {
+                start: start,
+                addition: [
+                    `${indent}${this.blockPre}`,
+                    `${indent}type ${name} = ${type};`,
+                    `${indent}${this.blockPost}`
+                ].join('\n')
+            };
+        }
     }
 }
 module.exports = FlowAnnotation;

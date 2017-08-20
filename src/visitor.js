@@ -7,15 +7,26 @@ class Visitor {
     constructor({ fixerIndex, sourceCode }) {
         this.fixerIndex = fixerIndex;
         this.sourceCode = sourceCode;
+        this.visitedComments = [];
     }
 
     visit(node) {
-        if (!node.leadingComments) {
-            return [];
-        }
+        const newComments = [];
+        const allComments = _.uniq(_.concat(
+            node.leadingComments || [],
+            node.comments || [],
+            node.trailingComments || []
+        ));
+
+        allComments.forEach(comment => {
+            const found = this.visitedComments.find(visited => _.isEqual(comment, visited));
+            if (!found) {
+                newComments.push(comment);
+            }
+        });
 
         let fixes = [];
-        for (const comment of node.leadingComments) {
+        for (const comment of newComments) {
             // doctrine doesn't support default values, so modify the comment
             // value prior to feeding it to doctrine.
             let commentValue = comment.value;
@@ -33,6 +44,7 @@ class Visitor {
                 }
 
                 const context = {
+                    comment: comment,
                     code: this.sourceCode,
                     tags: tags
                 };

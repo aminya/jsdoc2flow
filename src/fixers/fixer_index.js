@@ -1,7 +1,7 @@
 'use strict';
 
 class FixerIndex {
-    constructor({ paramFixer, returnsFixer }) {
+    constructor({ paramFixer, returnsFixer, typedefFixer }) {
         // http://usejsdoc.org/tags-param.html
         this.param = paramFixer;
         this.arg = this.param;
@@ -10,6 +10,9 @@ class FixerIndex {
         // http://usejsdoc.org/tags-returns.html
         this.returns = returnsFixer;
         this.return = this.returns;
+
+        // http://usejsdoc.org/tags-typedef.html
+        this.typedef = typedefFixer;
     }
 }
 module.exports = FixerIndex;
