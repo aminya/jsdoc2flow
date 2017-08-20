@@ -22,7 +22,7 @@ class TypedefFixer {
         const properties = tags.filter(t => {
             return ['property', 'prop'].includes(t.title);
         });
-        fixes.push(this.flowAnnotation.alias(node.start, indent, tag.name, tag.type, properties));
+        fixes.push(this.flowAnnotation.alias(node.start, indent, tag.title, tag.name, tag.type, properties));
 
         return fixes;
     }
