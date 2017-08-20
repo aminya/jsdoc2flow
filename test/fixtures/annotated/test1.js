@@ -32,7 +32,7 @@ function promiseMe() /*: Promise<string> */ {
      * @callback promiseMeCoroutine
      */
     /** @type {promiseMeCoroutine} */
-    const fn = Promise.coroutine(function*() {
+    const fn /*: promiseMeCoroutine */ = Promise.coroutine(function*() {
         return 1;
     });
     return fn();
