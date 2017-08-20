@@ -18,7 +18,8 @@ class ParamFixer {
         if (node.type !== 'FunctionDeclaration' &&
             node.type != 'VariableDeclaration' &&
             node.type != 'MethodDefinition' &&
-            node.type != 'Property') {
+            node.type != 'Property' &&
+            node.type != 'ExpressionStatement') {
             return fixes;
         }
 
@@ -40,6 +41,13 @@ class ParamFixer {
                 return fixes;
             }
             params = node.value.params;
+        }
+        else if (node.type === 'ExpressionStatement') {
+            if (node.expression.type !== 'AssignmentExpression' ||
+                node.expression.right.type !== 'FunctionExpression') {
+                return fixes;
+            }
+            params = node.expression.right.params;
         }
 
         for (const param of params) {

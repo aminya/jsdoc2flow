@@ -96,7 +96,27 @@ describe('returnsFixer', function() {
         });
     });
 
-    describe('return type of FunctionExpression', function() {
+    describe('return type of FunctionExpression in an ExpressionStatement', function() {
+        it('should work', function() {
+            const code = `
+            /**
+             * @returns {number}
+             */
+            Something.prototype.test = function() {
+            }
+            `;
+            const modifiedCode = converter.convertSourceCode(code);
+            modifiedCode.should.be.eql(`
+            /**
+             * @returns {number}
+             */
+            Something.prototype.test = function() /*: number */ {
+            }
+            `);
+        });
+    });
+
+    describe('return type of FunctionExpression in a variable declaration', function() {
         it('should work', function() {
             const code = `
             /**

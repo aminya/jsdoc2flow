@@ -13,7 +13,8 @@ class ReturnsFixer {
         if (node.type !== 'FunctionDeclaration' &&
             node.type != 'VariableDeclaration' &&
             node.type != 'MethodDefinition' &&
-            node.type != 'Property') {
+            node.type != 'Property' &&
+            node.type != 'ExpressionStatement') {
             return fixes;
         }
 
@@ -37,6 +38,13 @@ class ReturnsFixer {
                 return fixes;
             }
             blockStatementNode = node.value.body;
+        }
+        else if (node.type === 'ExpressionStatement') {
+            if (node.expression.type !== 'AssignmentExpression' ||
+                node.expression.right.type !== 'FunctionExpression') {
+                return fixes;
+            }
+            blockStatementNode = node.expression.right.body;
         }
 
         // Look back to try to find the ending bracket

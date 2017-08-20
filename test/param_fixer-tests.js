@@ -46,7 +46,27 @@ describe('paramFixer', function() {
         });
     });
 
-    describe('simple name for function assigned to variable', function() {
+    describe('simple name for function assigned to a variable', function() {
+        it('should work', function() {
+            const code = `
+            /**
+             * @param {number} a
+             */
+            Something.prototype.test = function(a) {
+            }
+            `;
+            const modifiedCode = converter.convertSourceCode(code);
+            modifiedCode.should.be.eql(`
+            /**
+             * @param {number} a
+             */
+            Something.prototype.test = function(a /*: number */) {
+            }
+            `);
+        });
+    });
+
+    describe('simple name for function assigned in variable declaration', function() {
         it('should work', function() {
             const code = `
             /**
