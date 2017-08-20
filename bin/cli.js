@@ -20,6 +20,7 @@ program
     .option('-i, --input-directory <dir>', 'Source directory for original files')
     .option('-o, --output-directory <dir>', 'Destination directory for converted files')
     .option('--ext [ext]', 'File extension to convert. Can specify multiple extensions. Defaults to \'js\' only.', collect, [])
+    .option('-v, --verbose', 'Verbose output')
     .parse(process.argv);
 
 if (program.ext.length === 0) {
@@ -27,8 +28,14 @@ if (program.ext.length === 0) {
 }
 program.ext = program.ext.map(e => e.startsWith('.') ? e : '.' + e);
 
+let log = () => {};
+if (program.verbose) {
+    log = console.log;
+}
+
 const Converter = require('../src');
 const converter = new Converter();
+
 
 if (program.file) {
     const code = fs.readFileSync(program.file).toString();
@@ -55,6 +62,7 @@ else if (program.inputDirectory && program.outputDirectory) {
                 const newPath = path.join(program.outputDirectory,
                     entryPath.replace(resolvedInputDir, ''));
                 fs.mkdirsSync(path.parse(newPath).dir);
+                log(`Convert ${entryPath} to ${newPath}`);
                 converter.convertFile(entryPath, newPath);
             }
         }
