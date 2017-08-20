@@ -2,23 +2,29 @@
 
 class FixerIndex {
     constructor({ paramFixer, returnsFixer, typedefFixer, typeFixer, callbackFixer }) {
+        this.fixers = {};
+
         // http://usejsdoc.org/tags-param.html
-        this.param = paramFixer;
-        this.arg = this.param;
-        this.argument = this.param;
+        this.fixers['@param'] = paramFixer;
+        this.fixers['@arg'] = this.fixers['@param'];
+        this.fixers['@argument'] = this.fixers['@param'];
 
         // http://usejsdoc.org/tags-returns.html
-        this.returns = returnsFixer;
-        this.return = this.returns;
+        this.fixers['@returns'] = returnsFixer;
+        this.fixers['@return'] = this.fixers['@returns'];
 
         // http://usejsdoc.org/tags-typedef.html
-        this.typedef = typedefFixer;
+        this.fixers['@typedef'] = typedefFixer;
 
         // http://usejsdoc.org/tags-type.html
-        this.type = typeFixer;
+        this.fixers['@type'] = typeFixer;
 
         // http://usejsdoc.org/tags-callback.html
-        this.callback = callbackFixer;
+        this.fixers['@callback'] = callbackFixer;
+    }
+
+    get(type) {
+        return this.fixers[`@${type}`];
     }
 }
 module.exports = FixerIndex;

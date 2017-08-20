@@ -40,7 +40,7 @@ class Visitor {
             const result = doctrine.parse(commentValue, { unwrap: true });
             const tags = result.tags;
             for (const tag of tags) {
-                const fixer = this.fixerIndex[tag.title];
+                const fixer = this.fixerIndex.get(tag.title);
                 if (!fixer) {
                     continue;
                 }
