@@ -65,6 +65,9 @@ class Converter {
         let modifiedCode = code;
         let offset = 0;
 
+        // Sort fixes by start location
+        fixes.sort((a, b) => a.start - b.start);
+
         for (const entry of fixes) {
             const before = modifiedCode.substring(0, entry.start + offset);
             const after = modifiedCode.substring(entry.start + offset);
