@@ -4,6 +4,7 @@
   "description": "Reads JSDoc comments and inserts corresponding Flow annotations",
   "main": "src/index.js",
   "scripts": {
+    "postversion": "git push --tags && npm publish && git push origin master",
     "test": "mocha \"test/**/*-tests.js\"",
     "lint": "eslint src test"
   },
