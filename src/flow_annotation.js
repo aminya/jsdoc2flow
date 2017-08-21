@@ -101,10 +101,9 @@ class FlowAnnotation {
             let name = nameParts[nameParts.length - 1];
             if (type.startsWith('?')) {
                 name += '?';
-                type = type.replace(/^\?/, '');
             }
 
-            if (type.toLowerCase() === 'object') {
+            if (type.toLowerCase().replace(/^\?/, '') === 'object') {
                 if (i + 1 < tags.length && tags[i + 1].name.startsWith(tag.name)) {
                     const result = this._transformTags(tags, i + 1);
                     i = result.end + 1;

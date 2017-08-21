@@ -278,26 +278,6 @@ describe('paramFixer', function() {
         });
     });
 
-    describe('simple name of nullable type', function() {
-        it('should work', function() {
-            const code = `
-            /**
-             * @param {?number} a
-             */
-            function test(a) {
-            }
-            `;
-            const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
-            /**
-             * @param {?number} a
-             */
-            function test(a /*: ?number */) {
-            }
-            `);
-        });
-    });
-
     describe('simple name of union type', function() {
         it('should work', function() {
             const code = `
@@ -414,7 +394,7 @@ describe('paramFixer', function() {
              * @param {number=} obj.d.e
              * @param {string} f
              */
-            function test(a /*: number */, obj /*: { c?: number, d?: { e?: number } } */, f /*: string */) {
+            function test(a /*: number */, obj /*: { c?: ?number, d?: { e?: ?number } } */, f /*: string */) {
             }
             `);
         });
