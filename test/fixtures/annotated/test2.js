@@ -13,7 +13,7 @@ const e = exports;
  * @param {object=} obj.e
  * @returns {number}
  */
-e.fn1 = ({a, b, c, d, e} /*: { a: string, b: string, c: object, d: ?object, e: ?object } */) /*: number */ => {
+e.fn1 = ({a, b, c, d, e} /*: { a: string, b: string, c: object, d?: object, e?: object } */) /*: number */ => {
 };
 
 /**
@@ -27,7 +27,7 @@ e.fn1 = ({a, b, c, d, e} /*: { a: string, b: string, c: object, d: ?object, e: ?
  * @param {object=} obj.e
  * @returns {number}
  */
-e.fn2 = ({a, b, c, d, e} /*: { a: string, b: string, c: object, d: ?object, e: ?object } */) /*: number */ => {
+e.fn2 = ({a, b, c, d, e} /*: { a: string, b: string, c: object, d?: object, e?: object } */) /*: number */ => {
 };
 
 /**
@@ -40,5 +40,5 @@ e.fn2 = ({a, b, c, d, e} /*: { a: string, b: string, c: object, d: ?object, e: ?
  * @param {object=} obj.d
  * @returns {number}
  */
-e.fn3 = ({a, b, c, d} /*: { a: string, b: string, c: ?object, d: ?object } */) /*: number */ => {
+e.fn3 = ({a, b, c, d} /*: { a: string, b: string, c?: object, d?: object } */) /*: number */ => {
 };
