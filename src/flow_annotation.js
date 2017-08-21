@@ -37,7 +37,7 @@ function determineVarType(varType) {
 }
 
 class FlowAnnotation {
-    constructor({ useFlowCommentSyntax }) {
+    constructor({ useFlowCommentSyntax = true } = {}) {
         if (useFlowCommentSyntax) {
             this.inlinePre = ' /*';
             this.inlinePost = ' */';
@@ -65,6 +65,58 @@ class FlowAnnotation {
             start: start,
             addition: addition
         };
+    }
+
+    inlineObj(start, tags) {
+        let addition = '';
+        tags.sort((a, b) => {
+            if (b.name > a.name) {
+                return -1;
+            }
+            else if (a.name > b.name) {
+                return 1;
+            }
+            return 0;
+        });
+
+        const result = this._transformTags(tags, 0);
+
+        addition = `${this.inlinePre}: { ${result.type} }${this.inlinePost}`;
+        return {
+            start: start,
+            addition: addition
+        };
+    }
+
+    _transformTags(tags, start) {
+        const objProps = [];
+        let i = start;
+        for (; i < tags.length; i++) {
+            const tag = tags[i];
+
+            const nameParts = tag.name.split('.');
+
+            const name = nameParts[nameParts.length - 1];
+            const type = determineVarType(tag.type);
+            if (type.toLowerCase() === 'object') {
+                if (i + 1 < tags.length && tags[i + 1].name.startsWith(tag.name)) {
+                    const result = this._transformTags(tags, i + 1);
+                    i = result.end + 1;
+                    objProps.push(`${name}: { ${result.type} }`);
+                }
+                else {
+                    objProps.push(`${name}: ${type}`);
+                }
+            }
+            else {
+                objProps.push(`${name}: ${type}`);
+            }
+        }
+
+        return {
+            end: i,
+            type: objProps.join(', ')
+        }
     }
 
     alias(start, indent, title, name, varType, properties, returnTag) {

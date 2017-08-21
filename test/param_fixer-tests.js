@@ -148,7 +148,7 @@ describe('paramFixer', function() {
              * @param {number} obj.a
              * @param {number} obj.b
              */
-            e.test = ({ a /*: number */, b /*: number */ }) => {
+            e.test = ({ a, b } /*: { a: number, b: number } */) => {
             };
             `);
         });
@@ -354,7 +354,39 @@ describe('paramFixer', function() {
              * @param {object} obj
              * @param {number} obj.a
              */
-            function test({ a /*: number */ }) {
+            function test({ a } /*: { a: number } */) {
+            }
+            `);
+        });
+    });
+
+    describe('multiple object patterns', function() {
+        it('should work', function() {
+            const code = `
+            /**
+             * @param {number} a
+             * @param {object} obj1
+             * @param {number} obj1.b
+             * @param {object} obj2
+             * @param {number} obj2.c
+             * @param {object} obj2.d
+             * @param {number} obj2.d.e
+             */
+            function test(a, { b }, { c, d: { e } }) {
+            }
+            `;
+            const modifiedCode = converter.convertSourceCode(code);
+            modifiedCode.should.be.eql(`
+            /**
+             * @param {number} a
+             * @param {object} obj1
+             * @param {number} obj1.b
+             * @param {object} obj2
+             * @param {number} obj2.c
+             * @param {object} obj2.d
+             * @param {number} obj2.d.e
+             */
+            function test(a /*: number */, { b } /*: { b: number } */, { c, d: { e } } /*: { c: number, d: { e: number } } */) {
             }
             `);
         });
@@ -376,7 +408,7 @@ describe('paramFixer', function() {
              * @param {object} obj
              * @param {number} obj.a
              */
-            function test({ a /*: number */ = 1 }) {
+            function test({ a = 1 } /*: { a: number } */) {
             }
             `);
         });
@@ -400,7 +432,7 @@ describe('paramFixer', function() {
              * @param {object} obj1.a
              * @param {number} obj1.a.b
              */
-            function test({ a /*: object */: { b /*: number */ } }) {
+            function test({ a: { b } } /*: { a: { b: number } } */) {
             }
             `);
         });
@@ -424,7 +456,7 @@ describe('paramFixer', function() {
              * @param {object} obj1.a
              * @param {number} obj1.a.b
              */
-            function test({ a /*: object */: { b /*: number */ = 1 } }) {
+            function test({ a: { b = 1 } } /*: { a: { b: number } } */) {
             }
             `);
         });
