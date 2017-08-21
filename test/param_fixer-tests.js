@@ -360,6 +360,36 @@ describe('paramFixer', function() {
         });
     });
 
+    describe('define object without object pattern', function() {
+        it('should work', function() {
+            const code = `
+            /**
+             * @param {number} a
+             * @param {object} obj
+             * @param {number} obj.c
+             * @param {object} obj.d
+             * @param {number} obj.d.e
+             * @param {string} f
+             */
+            function test(a, obj, f) {
+            }
+            `;
+            const modifiedCode = converter.convertSourceCode(code);
+            modifiedCode.should.be.eql(`
+            /**
+             * @param {number} a
+             * @param {object} obj
+             * @param {number} obj.c
+             * @param {object} obj.d
+             * @param {number} obj.d.e
+             * @param {string} f
+             */
+            function test(a /*: number */, obj /*: { c: number, d: { e: number } } */, f /*: string */) {
+            }
+            `);
+        });
+    });
+
     describe('multiple object patterns', function() {
         it('should work', function() {
             const code = `

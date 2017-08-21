@@ -84,7 +84,12 @@ class ParamFixer {
 
                 if (n.type === 'Identifier') {
                     if (n.name === tagName) {
-                        fixes.push(this.flowAnnotation.inline(n.end, tag.type, entry.restParam));
+                        if (idGroup) {
+                            fixes.push(this.flowAnnotation.inlineObj(n.end, idGroup.children));
+                        }
+                        else {
+                            fixes.push(this.flowAnnotation.inline(n.end, tag.type, entry.restParam));
+                        }
                     }
                 }
                 else if (n.type === 'AssignmentPattern') {
