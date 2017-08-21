@@ -1,19 +1,26 @@
 'use strict';
 
+function typeSubstitute(typeName) {
+    if (typeName.toLowerCase() === 'object') {
+        return '{}';
+    }
+    return typeName;
+}
+
 function determineVarType(varType) {
     if (varType.type === 'NameExpression') {
-        return varType.name;
+        return typeSubstitute(varType.name);
     }
     else if (varType.type === 'TypeApplication') {
         if (varType.expression.type === 'NameExpression' &&
             varType.applications.every(a => a.type === 'NameExpression')) {
-            const innerTypes = varType.applications.map(a => a.name).join(',');
-            return `${varType.expression.name}<${innerTypes}>`;
+            const innerTypes = varType.applications.map(a => typeSubstitute(a.name)).join(',');
+            return `${typeSubstitute(varType.expression.name)}<${innerTypes}>`;
         }
     }
     else if (varType.type === 'OptionalType' || varType.type === 'NullableType') {
         if (varType.expression.type === 'NameExpression') {
-            return `?${varType.expression.name}`;
+            return `?${typeSubstitute(varType.expression.name)}`;
         }
     }
     else if (varType.type === 'AllLiteral') {
@@ -26,7 +33,7 @@ function determineVarType(varType) {
             if (element.type !== 'NameExpression') {
                 allNameExpressions = false;
             }
-            types.push(element.name);
+            types.push(typeSubstitute(element.name));
         }
         if (!allNameExpressions) {
             throw new Error('union type not all NameExpressions');
@@ -103,7 +110,7 @@ class FlowAnnotation {
                 name += '?';
             }
 
-            if (type.toLowerCase().replace(/^\?/, '') === 'object') {
+            if (type.toLowerCase().replace(/^\?/, '') === '{}') {
                 if (i + 1 < tags.length && tags[i + 1].name.startsWith(tag.name)) {
                     const result = this._transformTags(tags, i + 1);
                     i = result.end + 1;
@@ -143,7 +150,7 @@ class FlowAnnotation {
         }
         else {
             const type = determineVarType(varType);
-            if (type.toLowerCase() === 'object' && properties.length) {
+            if (type.toLowerCase() === '{}' && properties.length) {
                 const lines = [];
                 const propLines = [];
                 lines.push(`${this.blockPre}`);

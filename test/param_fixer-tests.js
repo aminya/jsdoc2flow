@@ -26,6 +26,26 @@ describe('paramFixer', function() {
         });
     });
 
+    describe('object type should turn into {}', function() {
+        it('should work', function() {
+            const code = `
+            /**
+             * @param {object} obj
+             */
+            function test(obj) {
+            }
+            `;
+            const modifiedCode = converter.convertSourceCode(code);
+            modifiedCode.should.be.eql(`
+            /**
+             * @param {object} obj
+             */
+            function test(obj /*: {  } */) {
+            }
+            `);
+        });
+    });
+
     describe('simple name by itself and nothing else', function() {
         it('should work', function() {
             const code = `
@@ -538,7 +558,7 @@ describe('paramFixer', function() {
              * @param {object[]} obj
              * @param {number} obj[].a
              */
-            function test(obj /*: Array<object> */) {
+            function test(obj /*: Array<{}> */) {
             }
             `);
         });
