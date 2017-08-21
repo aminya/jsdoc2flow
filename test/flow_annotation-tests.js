@@ -27,7 +27,7 @@ describe('FlowAnnotation', function() {
                     name: 'obj2.d.e'
                 }
             ];
-            const result = flowAnnotation._transformTags(tags, 0);
+            const result = flowAnnotation._transformTags(tags, [], 0);
             result.type.should.be.eql('c: number, d: { e: number }');
         });
     });

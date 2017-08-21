@@ -101,10 +101,10 @@ class ParamFixer {
                     // Collect all the Identifiers within this ObjectPattern
                     const ids = this._getIdentifiersFromObjectPattern(n);
 
-                    const diff = _.difference(ids, idGroup.ids);
+                    const diff = _.difference(ids.map(i => i.id), idGroup.ids);
                     if (diff.length === 0) {
                         // Found a match!
-                        fixes.push(this.flowAnnotation.inlineObj(n.end, idGroup.children));
+                        fixes.push(this.flowAnnotation.inlineObj(n.end, idGroup.children, ids));
                         break;
                     }
                 }
@@ -130,10 +130,15 @@ class ParamFixer {
             visitedNodes.push(node);
 
             if (node.type === 'Identifier') {
-                ids.push(node.name);
+                ids.push({ id: node.name, hasDefault: false });
             }
             else if (node.type === 'AssignmentPattern') {
-                stack.push(node.left);
+                if (node.left.type === 'Identifier') {
+                    ids.push({ id: node.left.name, hasDefault: true });
+                }
+                else {
+                    stack.push(node.left);
+                }
             }
             else if (node.type === 'ObjectPattern') {
                 for (const prop of node.properties) {

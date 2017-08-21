@@ -74,7 +74,7 @@ class FlowAnnotation {
         };
     }
 
-    inlineObj(start, tags) {
+    inlineObj(start, tags, ids = []) {
         let addition = '';
         tags.sort((a, b) => {
             if (b.name > a.name) {
@@ -86,7 +86,7 @@ class FlowAnnotation {
             return 0;
         });
 
-        const result = this._transformTags(tags, 0);
+        const result = this._transformTags(tags, ids, 0);
 
         addition = `${this.inlinePre}: { ${result.type} }${this.inlinePost}`;
         return {
@@ -95,7 +95,7 @@ class FlowAnnotation {
         };
     }
 
-    _transformTags(tags, start) {
+    _transformTags(tags, ids, start) {
         const objProps = [];
         let i = start;
         for (; i < tags.length; i++) {
@@ -106,13 +106,18 @@ class FlowAnnotation {
             let type = determineVarType(tag.type);
 
             let name = nameParts[nameParts.length - 1];
+            const idEntry = ids.find(i => i.id === name);
             if (type.startsWith('?')) {
                 name += '?';
             }
 
+            if (idEntry && idEntry.hasDefault && type.startsWith('?')) {
+                type = type.substring(1);
+            }
+
             if (type.toLowerCase().replace(/^\?/, '') === '{}') {
                 if (i + 1 < tags.length && tags[i + 1].name.startsWith(tag.name)) {
-                    const result = this._transformTags(tags, i + 1);
+                    const result = this._transformTags(tags, ids, i + 1);
                     i = result.end + 1;
                     objProps.push(`${name}: { ${result.type} }`);
                 }

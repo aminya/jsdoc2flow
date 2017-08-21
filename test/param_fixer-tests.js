@@ -218,6 +218,28 @@ describe('paramFixer', function() {
         });
     });
 
+    describe('object property with default value', function() {
+        it('should not put ? in front of the type', function() {
+            const code = `
+            /**
+             * @param {object} obj
+             * @param {number=} obj.a
+             */
+            function test({ a = 1 }) {
+            }
+            `;
+            const modifiedCode = converter.convertSourceCode(code);
+            modifiedCode.should.be.eql(`
+            /**
+             * @param {object} obj
+             * @param {number=} obj.a
+             */
+            function test({ a = 1 } /*: { a?: number } */) {
+            }
+            `);
+        });
+    });
+
     describe('simple name with default value', function() {
         it('should just ignore the default value', function() {
             const code = `
