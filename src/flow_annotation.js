@@ -74,6 +74,20 @@ class FlowAnnotation {
         };
     }
 
+    inlineProps(start, classIndent, tags) {
+        const lines = [];
+        for (const tag of tags) {
+            const type = determineVarType(tag.type);
+            lines.push(`${classIndent}${tag.name}: ${type};`);
+        }
+        const props = lines.join('\n');
+
+        return {
+            start: start,
+            addition: `\n${classIndent}${this.blockPre}\n${props}\n${classIndent}${this.blockPost}`
+        };
+    }
+
     inlineObj(start, tags, ids = []) {
         let addition = '';
         tags.sort((a, b) => {

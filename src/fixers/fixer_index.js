@@ -1,7 +1,14 @@
 'use strict';
 
 class FixerIndex {
-    constructor({ paramFixer, returnsFixer, typedefFixer, typeFixer, callbackFixer }) {
+    constructor({
+        paramFixer,
+        returnsFixer,
+        typedefFixer,
+        typeFixer,
+        callbackFixer,
+        propertyFixer
+    }) {
         this.fixers = {};
 
         // http://usejsdoc.org/tags-param.html
@@ -21,6 +28,10 @@ class FixerIndex {
 
         // http://usejsdoc.org/tags-callback.html
         this.fixers['@callback'] = callbackFixer;
+
+        // http://usejsdoc.org/tags-property.html
+        this.fixers['@property'] = propertyFixer;
+        this.fixers['@prop'] = this.fixers['@property'];
     }
 
     get(type) {
