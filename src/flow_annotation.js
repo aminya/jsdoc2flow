@@ -48,6 +48,11 @@ function determineVarType(varType) {
     else if (varType.type === 'UndefinedLiteral') {
         return 'void';
     }
+    else if (varType.type === 'FunctionType') {
+        const args = varType.params.map(determineVarType);
+        const ret = determineVarType(varType.result || { type: 'UndefinedLiteral' });
+        return `(${args.join(',')}) => ${ret}`;
+    }
 
     throw new Error(`unknown '${varType.type}' type - ${JSON.stringify(varType)}`);
 }
