@@ -108,6 +108,9 @@ class ParamFixer {
                         break;
                     }
                 }
+                else if (n.type === 'ObjectPattern' && tags.indexOf(tag) === params.indexOf(param)) {
+                    fixes.push(this.flowAnnotation.inline(n.end, tag.type, entry.resParam));
+                }
                 else if (n.type === 'RestElement') {
                     stack.push({ n: n.argument, restParam: true });
                 }
