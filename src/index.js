@@ -14,6 +14,12 @@ class Converter {
         };
         this.espreeOptions.ecmaVersion = options.ecmaVersion || 6;
 
+        this.espreeOptions.ecmaFeatures = {
+            impliedStrict: true,
+            experimentalObjectRestSpread: true,
+            jsx: true,
+        };
+
         this.container = this._createContainer(options);
     }
 

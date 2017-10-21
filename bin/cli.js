@@ -19,6 +19,7 @@ program
     .option('-f, --file <file>', 'The file to convert and output to stdout')
     .option('-i, --input-directory <dir>', 'Source directory for original files')
     .option('-o, --output-directory <dir>', 'Destination directory for converted files')
+    .option('-e, --ecma-version <version>', 'EcmaScript version (default 6 / 2015): 6, 7, 8, 9')
     .option('--ext [ext]', 'File extension to convert. Can specify multiple extensions. Defaults to \'js\' only.', collect, [])
     .option('-v, --verbose', 'Verbose output')
     .parse(process.argv);
@@ -34,7 +35,9 @@ if (program.verbose) {
 }
 
 const Converter = require('../src');
-const converter = new Converter();
+const converter = new Converter(program.ecmaVersion && {
+    ecmaVersion: Number(program.ecmaVersion)
+});
 
 
 if (program.file) {
