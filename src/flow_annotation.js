@@ -1,7 +1,7 @@
 'use strict';
 
 function typeSubstitute(typeName) {
-    if (typeName.toLowerCase() === 'object') {
+    if (typeName && typeName.toLowerCase() === 'object') {
         return '{}';
     }
     return typeName;
@@ -13,14 +13,8 @@ function determineVarType(varType) {
     }
     else if (varType.type === 'TypeApplication') {
         const parentType = typeSubstitute(varType.expression.name);
-        const innerTypes = varType.applications.map((a) => {
-            if (a.type === 'NameExpression') {
-                return typeSubstitute(a.name);
-            } else {
-                return determineVarType(a);
-            }
-        }).join(',');
-        return `${parentType}<${innerTypes}>`;
+        const innerTypes = varType.applications.map(determineVarType)
+        return `${parentType}<${innerTypes.join(', ')}>`;
     }
     else if (varType.type === 'OptionalType' || varType.type === 'NullableType') {
         return `?${determineVarType(varType.expression)}`;
@@ -29,18 +23,7 @@ function determineVarType(varType) {
         return 'any';
     }
     else if (varType.type === 'UnionType') {
-        const types = [];
-        let allNameExpressions = true;
-        for (const element of varType.elements) {
-            if (element.type !== 'NameExpression') {
-                allNameExpressions = false;
-            }
-            types.push(typeSubstitute(element.name));
-        }
-        if (!allNameExpressions) {
-            throw new Error('union type not all NameExpressions');
-        }
-        return types.join(' | ');
+        return varType.elements.map(determineVarType).join(' | ');
     }
     else if (varType.type === 'FunctionType') {
         const args = varType.params.map(determineVarType);
