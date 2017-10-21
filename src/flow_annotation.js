@@ -1,7 +1,7 @@
 'use strict';
 
 function typeSubstitute(typeName) {
-    if (typeName.toLowerCase() === 'object') {
+    if (typeName && typeName.toLowerCase() === 'object') {
         return '{}';
     }
     return typeName;
@@ -12,34 +12,39 @@ function determineVarType(varType) {
         return typeSubstitute(varType.name);
     }
     else if (varType.type === 'TypeApplication') {
-        if (varType.expression.type === 'NameExpression' &&
-            varType.applications.every(a => a.type === 'NameExpression')) {
-            const innerTypes = varType.applications.map(a => typeSubstitute(a.name)).join(',');
-            return `${typeSubstitute(varType.expression.name)}<${innerTypes}>`;
-        }
+        const parentType = typeSubstitute(varType.expression.name);
+        const innerTypes = varType.applications.map(determineVarType)
+        return `${parentType}<${innerTypes.join(', ')}>`;
     }
     else if (varType.type === 'OptionalType' || varType.type === 'NullableType') {
-        if (varType.expression.type === 'NameExpression') {
-            return `?${typeSubstitute(varType.expression.name)}`;
-        }
+        return `?${determineVarType(varType.expression)}`;
     }
     else if (varType.type === 'AllLiteral') {
         return 'any';
     }
     else if (varType.type === 'UnionType') {
-        const types = [];
-        let allNameExpressions = true;
-        for (const element of varType.elements) {
-            if (element.type !== 'NameExpression') {
-                allNameExpressions = false;
-            }
-            types.push(typeSubstitute(element.name));
-        }
-        if (!allNameExpressions) {
-            throw new Error('union type not all NameExpressions');
-        }
-        return types.join(' | ');
+        return varType.elements.map(determineVarType).join(' | ');
     }
+    else if (varType.type === 'FunctionType') {
+        const args = varType.params.map(determineVarType);
+        const ret = determineVarType(varType.result || { type: 'UndefinedLiteral' });
+        return `(${args.join(',')}) => ${ret}`;
+    }
+    else if (varType.type === 'RecordType') {
+        const fields = varType.fields.map(({ key, value }) => `${key}: ${determineVarType(value)}`);
+        return `{ ${fields.join(', ')} }`;
+    }
+    else if (varType.type === 'ArrayType') {
+        const elems = varType.elements.map(determineVarType);
+        return `Array<${elems.join(', ')}>`;
+    }
+    else if (varType.type === 'NullLiteral') {
+        return 'null';
+    }
+    else if (varType.type === 'UndefinedLiteral') {
+        return 'void';
+    }
+
     throw new Error(`unknown '${varType.type}' type - ${JSON.stringify(varType)}`);
 }
 
