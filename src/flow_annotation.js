@@ -12,16 +12,18 @@ function determineVarType(varType) {
         return typeSubstitute(varType.name);
     }
     else if (varType.type === 'TypeApplication') {
-        if (varType.expression.type === 'NameExpression' &&
-            varType.applications.every(a => a.type === 'NameExpression')) {
-            const innerTypes = varType.applications.map(a => typeSubstitute(a.name)).join(',');
-            return `${typeSubstitute(varType.expression.name)}<${innerTypes}>`;
-        }
+        const parentType = typeSubstitute(varType.expression.name);
+        const innerTypes = varType.applications.map((a) => {
+            if (a.type === 'NameExpression') {
+                return typeSubstitute(a.name);
+            } else {
+                return determineVarType(a);
+            }
+        }).join(',');
+        return `${parentType}<${innerTypes}>`;
     }
     else if (varType.type === 'OptionalType' || varType.type === 'NullableType') {
-        if (varType.expression.type === 'NameExpression') {
-            return `?${typeSubstitute(varType.expression.name)}`;
-        }
+        return `?${determineVarType(varType.expression)}`;
     }
     else if (varType.type === 'AllLiteral') {
         return 'any';
@@ -40,6 +42,13 @@ function determineVarType(varType) {
         }
         return types.join(' | ');
     }
+    else if (varType.type === 'NullLiteral') {
+        return 'null';
+    }
+    else if (varType.type === 'UndefinedLiteral') {
+        return 'void';
+    }
+
     throw new Error(`unknown '${varType.type}' type - ${JSON.stringify(varType)}`);
 }
 
