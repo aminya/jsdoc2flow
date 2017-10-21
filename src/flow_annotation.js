@@ -34,6 +34,10 @@ function determineVarType(varType) {
         const fields = varType.fields.map(({ key, value }) => `${key}: ${determineVarType(value)}`);
         return `{ ${fields.join(', ')} }`;
     }
+    else if (varType.type === 'ArrayType') {
+        const elems = varType.elements.map(determineVarType);
+        return `Array<${elems.join(', ')}>`;
+    }
     else if (varType.type === 'NullLiteral') {
         return 'null';
     }
