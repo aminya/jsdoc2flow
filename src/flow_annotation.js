@@ -42,16 +42,20 @@ function determineVarType(varType) {
         }
         return types.join(' | ');
     }
+    else if (varType.type === 'FunctionType') {
+        const args = varType.params.map(determineVarType);
+        const ret = determineVarType(varType.result || { type: 'UndefinedLiteral' });
+        return `(${args.join(',')}) => ${ret}`;
+    }
+    else if (varType.type === 'RecordType') {
+        const fields = varType.fields.map(({ key, value }) => `${key}: ${determineVarType(value)}`);
+        return `{ ${fields.join(', ')} }`;
+    }
     else if (varType.type === 'NullLiteral') {
         return 'null';
     }
     else if (varType.type === 'UndefinedLiteral') {
         return 'void';
-    }
-    else if (varType.type === 'FunctionType') {
-        const args = varType.params.map(determineVarType);
-        const ret = determineVarType(varType.result || { type: 'UndefinedLiteral' });
-        return `(${args.join(',')}) => ${ret}`;
     }
 
     throw new Error(`unknown '${varType.type}' type - ${JSON.stringify(varType)}`);
