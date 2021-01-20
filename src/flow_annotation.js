@@ -14,6 +14,8 @@ function literalParse(element) {
         return 'undefined'
     } else if (element.type === 'VoidLiteral') {
         return 'void'
+    } else if (element.type === 'AllLiteral') {
+            return 'any';
     } else if (element.type.indexOf('Literal') >= 0) {
         // other types of literals
         const value = typeSubstitute(element.type.replace('Literal', '').toLowerCase());
@@ -36,9 +38,6 @@ function determineVarType(varType) {
     }
     else if (varType.type === 'OptionalType' || varType.type === 'NullableType') {
         return `?${typeSubstitute(determineVarType(varType.expression))}`;
-    }
-    else if (varType.type === 'AllLiteral') {
-        return 'any';
     }
     else if (varType.type === 'UnionType') {
         let types = [];
