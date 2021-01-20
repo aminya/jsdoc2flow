@@ -12,10 +12,13 @@ function literalParse(element) {
         return 'null';
     } else if (element.type === 'UndefinedLiteral') {
         return 'undefined'
+    } else if (element.type === 'VoidLiteral') {
+        return 'void'
+    } else if (element.type === 'AllLiteral') {
+            return 'any';
     } else if (element.type.indexOf('Literal') >= 0) {
         // other types of literals
         const value = typeSubstitute(element.type.replace('Literal', '').toLowerCase());
-        console.warn(`Assuming the value of ${element} to be ${value}`);
         return value;
     } else {
         return null;
@@ -27,40 +30,32 @@ function determineVarType(varType) {
         return typeSubstitute(varType.name);
     }
     else if (varType.type === 'TypeApplication') {
-        if (varType.expression.type === 'NameExpression' &&
-            varType.applications.every(a => a.type === 'NameExpression')) {
-            const innerTypes = varType.applications.map(a => typeSubstitute(a.name)).join(',');
-            return `${typeSubstitute(varType.expression.name)}<${innerTypes}>`;
-        }
+        const innerTypes = varType.applications.map(a => typeSubstitute(determineVarType(a)));
+        return `${typeSubstitute(determineVarType(varType.expression))}<${innerTypes.join(', ')}>`;
     }
     else if (varType.type === 'OptionalType' || varType.type === 'NullableType') {
-        if (varType.expression.type === 'NameExpression') {
-            return `?${typeSubstitute(varType.expression.name)}`;
-        }
-    }
-    else if (varType.type === 'AllLiteral') {
-        return 'any';
+        return `?${typeSubstitute(determineVarType(varType.expression))}`;
     }
     else if (varType.type === 'UnionType') {
-        let types = [];
-        for (const element of varType.elements) {
-            if (element.type === 'NameExpression') {
-                types.push(typeSubstitute(element.name));
-            } else {
-                const value = literalParse(element);
-                if (value !== null) {
-                    types.push(value);
-                } else {
-                    types.push(element.type);
-                    console.log(`unknown element ${element}`);
-                }
-            }
-        }
-        return types.join(' | ');
+        const elements = varType.elements
+        const elementsNames = elements.map(e => determineVarType(e))
+        return elementsNames.join(' | ');
     } else if (varType.type.indexOf('Literal') >= 0) {
         return literalParse(varType);
+    } else if (varType.type === 'FunctionType') {
+        const params = varType.params
+        const paramsNames = params.map(p => determineVarType(p))
+        return `(${paramsNames.join(', ')}) => ${determineVarType(varType.result)}`
+    } else if (varType.type === 'ParameterType') {
+        return `${varType.name}: ${determineVarType(varType.expression)}`
+    } else if (varType.type === 'ArrayType') {
+        const elements = varType.elements
+        const elementsNames = elements.map(e => determineVarType(e))
+        return `[${elementsNames.join(', ')}]`
     }
-    console.warn(`unknown '${varType.type}' type - ${JSON.stringify(varType)}\n`);
+    console.warn(`Warning: unknown '${varType.type}' type - ${JSON.stringify(varType)}
+        Open an issue at https://github.com/aminya/jsdoc2flow/issues/new
+    `);
 }
 
 class FlowAnnotation {

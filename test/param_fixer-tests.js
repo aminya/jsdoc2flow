@@ -645,4 +645,44 @@ describe('paramFixer', function() {
             `);
         });
     });
+
+    describe('Function types', function() {
+        it('should work', function() {
+            const code = `
+            /**
+             * @param  {function(event:Object):void} callback
+             */
+            function onDidChange (callback) {
+            }
+            `;
+            const modifiedCode = converter.convertSourceCode(code);
+            isCodeEqual(modifiedCode, `
+            /**
+             * @param  {function(event:Object):void} callback
+             */
+             function onDidChange (callback: (event:Object) => void) {
+             }
+            `);
+        });
+    });
+
+    describe('Array Literal types', function() {
+        it('should work', function() {
+            const code = `
+            /**
+             * @param  {[elm1]} arg1
+             */
+            function test (arg1) {
+            }
+            `;
+            const modifiedCode = converter.convertSourceCode(code);
+            isCodeEqual(modifiedCode, `
+            /**
+            * @param  {[elm1]} arg1
+             */
+             function test (arg1: [elm1]) {
+             }
+            `);
+        });
+    });
 });
