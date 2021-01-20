@@ -7,6 +7,21 @@ function typeSubstitute(typeName) {
     return typeName;
 }
 
+function literalParse(element) {
+    if (element.type === 'NullLiteral') {
+        return 'null';
+    } else if (element.type === 'UndefinedLiteral') {
+        return 'undefined'
+    } else if (element.type.indexOf('Literal') >= 0) {
+        // other types of literals
+        const value = typeSubstitute(element.type.replace('Literal', '').toLowerCase());
+        console.warn(`Assuming the value of ${element} to be ${value}`);
+        return value;
+    } else {
+        return null;
+    }
+}
+
 function determineVarType(varType) {
     if (varType.type === 'NameExpression') {
         return typeSubstitute(varType.name);
@@ -31,18 +46,14 @@ function determineVarType(varType) {
         for (const element of varType.elements) {
             if (element.type === 'NameExpression') {
                 types.push(typeSubstitute(element.name));
-            } else if (element.type === 'NullLiteral') {
-                types.push(typeSubstitute('null'));
-            } else if (element.type === 'UndefinedLiteral') {
-                types.push(typeSubstitute('undefined'));
-            } else if (element.type.indexOf('Literal') >= 0) {
-                // other types of literals
-                const value = typeSubstitute(element.type.replace('Literal', '').toLowerCase());
-                types.push(value);
-                console.warn(`Assuming the value of ${element} to be ${value}`);
             } else {
-                types.push(element.type);
-                console.log(`unknown element ${element}`);
+                const value = literalParse(element);
+                if (value !== null) {
+                    types.push(value);
+                } else {
+                    types.push(element.type);
+                    console.log(`unknown element ${element}`);
+                }
             }
         }
         return types.join(' | ');
