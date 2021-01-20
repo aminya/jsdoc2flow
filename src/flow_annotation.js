@@ -12,6 +12,8 @@ function literalParse(element) {
         return 'null';
     } else if (element.type === 'UndefinedLiteral') {
         return 'undefined'
+    } else if (element.type === 'VoidLiteral') {
+        return 'void'
     } else if (element.type.indexOf('Literal') >= 0) {
         // other types of literals
         const value = typeSubstitute(element.type.replace('Literal', '').toLowerCase());
