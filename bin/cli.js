@@ -21,8 +21,9 @@ program
     .option('-i, --input-directory <dir>', 'Source directory for original files')
     .option('-o, --output-directory <dir>', 'Destination directory for converted files')
     .option('--ext [ext]', 'File extension to convert. Can specify multiple extensions. Defaults to \'js\' only.', collect, ['js'])
-    .option('-v, --verbose', 'Verbose output')
-    .parse(process.argv);
+    .option('-v, --verbose', 'Verbose output');
+
+program.parse(process.argv);
 
 program.ext = program.ext.map(e => e.startsWith('.') ? e : '.' + e);
 
