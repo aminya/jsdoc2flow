@@ -40,7 +40,7 @@ function determineVarType(varType) {
         }
         return types.join(' | ');
     }
-    throw new Error(`unknown '${varType.type}' type - ${JSON.stringify(varType)}`);
+    console.warn(`unknown '${varType.type}' type - ${JSON.stringify(varType)}\n`);
 }
 
 class FlowAnnotation {
