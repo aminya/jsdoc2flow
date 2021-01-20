@@ -19,6 +19,7 @@ function collect(val, list) {
 program
   .option("-f, --file <file>", "The file to convert and output to stdout")
   .option("-i, --input-directory <dir>", "Source directory for original files")
+  .option("-w, --overwrite", "Overwrite the original files")
   .option("-o, --output-directory <dir>", "Destination directory for converted files")
   .option(
     "--ext [ext]",
@@ -45,9 +46,10 @@ if (options.file) {
   const code = fs.readFileSync(options.file).toString()
   const modifiedCode = converter.convertSourceCode(code)
   console.log(modifiedCode)
-} else if (options.inputDirectory && options.outputDirectory) {
+} else if ((options.inputDirectory && options.outputDirectory) || (options.inputDirectory && options.overwrite)) {
   const resolvedInputDir = path.resolve(options.inputDirectory)
-  const resolvedOutputDir = path.resolve(options.outputDirectory)
+  const outputDirectory = (options.overwrite) ? options.inputDirectory : options.outputDirectory
+  const resolvedOutputDir = path.resolve(outputDirectory)
 
   fs.mkdirsSync(resolvedOutputDir)
   const stack = [resolvedInputDir]
@@ -61,18 +63,19 @@ if (options.file) {
       if (entryInfo.isDirectory()) {
         stack.push(entryPath)
       } else {
-        const newPath = path.join(options.outputDirectory, entryPath.replace(resolvedInputDir, ""))
+        const newPath = path.join(outputDirectory, entryPath.replace(resolvedInputDir, ""))
         fs.mkdirsSync(path.parse(newPath).dir)
         if (options.ext.includes(entryPathObj.ext)) {
           log(`Convert ${entryPath} to ${newPath}`)
           converter.convertFile(entryPath, newPath)
         } else {
           log(`Copy ${entryPath} to ${newPath}`)
-          fs.copySync(entryPath, newPath)
+          fs.copySync(entryPath, newPath, {overwrite: true})
         }
       }
     }
   }
 } else {
+  console.log("Unkown cli parameters. Use the following options:")
   program.outputHelp()
 }
