@@ -1,22 +1,24 @@
-'use strict';
+"use strict"
 
-const { isCodeEqual } = require('./helper')
+const { isCodeEqual } = require("./helper")
 
-const Converter = require('../src');
-const converter = new Converter();
+const Converter = require("../src")
+const converter = new Converter()
 
-describe('propertyFixer', function() {
-    describe('specify property on ES6 class variation 1', function() {
-        it('should work', function() {
-            const code = `
+describe("propertyFixer", function () {
+  describe("specify property on ES6 class variation 1", function () {
+    it("should work", function () {
+      const code = `
             /**
              * @property {number} count
              */
             class Test {
             }
-            `;
-            const modifiedCode = converter.convertSourceCode(code);
-            isCodeEqual(modifiedCode, `
+            `
+      const modifiedCode = converter.convertSourceCode(code)
+      isCodeEqual(
+        modifiedCode,
+        `
             /**
              * @property {number} count
              */
@@ -25,22 +27,25 @@ describe('propertyFixer', function() {
             count: number;
 
             }
-            `);
-        });
-    });
+            `
+      )
+    })
+  })
 
-    describe('specify property on ES6 class variation 2', function() {
-        it('should work', function() {
-            const code = `
+  describe("specify property on ES6 class variation 2", function () {
+    it("should work", function () {
+      const code = `
             /**
              * @property {number} count
              */
             class Test
             {
             }
-            `;
-            const modifiedCode = converter.convertSourceCode(code);
-            isCodeEqual(modifiedCode, `
+            `
+      const modifiedCode = converter.convertSourceCode(code)
+      isCodeEqual(
+        modifiedCode,
+        `
             /**
              * @property {number} count
              */
@@ -50,22 +55,25 @@ describe('propertyFixer', function() {
             count: number;
 
             }
-            `);
-        });
-    });
+            `
+      )
+    })
+  })
 
-    describe('multiple properties', function() {
-        it('should work', function() {
-            const code = `
+  describe("multiple properties", function () {
+    it("should work", function () {
+      const code = `
             /**
              * @property {number} prop1
              * @property {number} prop2
              */
             class Test {
             }
-            `;
-            const modifiedCode = converter.convertSourceCode(code);
-            isCodeEqual(modifiedCode, `
+            `
+      const modifiedCode = converter.convertSourceCode(code)
+      isCodeEqual(
+        modifiedCode,
+        `
             /**
              * @property {number} prop1
              * @property {number} prop2
@@ -76,7 +84,8 @@ describe('propertyFixer', function() {
             prop2: number;
 
             }
-            `);
-        });
-    });
-});
+            `
+      )
+    })
+  })
+})

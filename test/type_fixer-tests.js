@@ -1,38 +1,44 @@
-'use strict';
+"use strict"
 
-const { isCodeEqual } = require('./helper')
+const { isCodeEqual } = require("./helper")
 
-const Converter = require('../src');
-const converter = new Converter();
+const Converter = require("../src")
+const converter = new Converter()
 
-describe('typeFixer', function() {
-    describe('specify type on variable declaration', function() {
-        it('should work', function() {
-            const code = `
+describe("typeFixer", function () {
+  describe("specify type on variable declaration", function () {
+    it("should work", function () {
+      const code = `
             /** @type {number} */
             const count = 1;
-            `;
-            const modifiedCode = converter.convertSourceCode(code);
-            isCodeEqual(modifiedCode, `
+            `
+      const modifiedCode = converter.convertSourceCode(code)
+      isCodeEqual(
+        modifiedCode,
+        `
             /** @type {number} */
             const count : number = 1;
-            `);
-        });
-    });
+            `
+      )
+    })
+  })
 
-    describe('specify type between variable declarations', function() {
-        it('should not get confused', function() {
-            const code = `
+  describe("specify type between variable declarations", function () {
+    it("should not get confused", function () {
+      const code = `
             const var1 = 2;
             /** @type {number} */
             const count = 1;
-            `;
-            const modifiedCode = converter.convertSourceCode(code);
-            isCodeEqual(modifiedCode, `
+            `
+      const modifiedCode = converter.convertSourceCode(code)
+      isCodeEqual(
+        modifiedCode,
+        `
             const var1 = 2;
             /** @type {number} */
             const count : number = 1;
-            `);
-        });
-    });
-});
+            `
+      )
+    })
+  })
+})

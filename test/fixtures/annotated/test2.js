@@ -1,6 +1,6 @@
-'use strict';
+"use strict"
 
-const e = exports;
+const e = exports
 
 /**
  * Function 1
@@ -13,8 +13,7 @@ const e = exports;
  * @param {object=} obj.e
  * @returns {number}
  */
-e.fn1 = ({a, b, c, d, e}: { a: string, b: string, c: {}, d?: ?{}, e?: ?{} }) : number => {
-};
+e.fn1 = ({ a, b, c, d, e }: { a: string, b: string, c: {}, d?: ?{}, e?: ?{} }): number => {}
 
 /**
  * Function 2
@@ -27,8 +26,7 @@ e.fn1 = ({a, b, c, d, e}: { a: string, b: string, c: {}, d?: ?{}, e?: ?{} }) : n
  * @param {object=} obj.e
  * @returns {number}
  */
-e.fn2 = ({a, b, c, d, e}: { a: string, b: string, c: {}, d?: ?{}, e?: ?{} }) : number => {
-};
+e.fn2 = ({ a, b, c, d, e }: { a: string, b: string, c: {}, d?: ?{}, e?: ?{} }): number => {}
 
 /**
  * Function 3
@@ -40,5 +38,4 @@ e.fn2 = ({a, b, c, d, e}: { a: string, b: string, c: {}, d?: ?{}, e?: ?{} }) : n
  * @param {object=} obj.d
  * @returns {number}
  */
-e.fn3 = ({a, b, c, d} : { a: string, b: string, c?: ?{}, d?: ?{} }) : number => {
-};
+e.fn3 = ({ a, b, c, d }: { a: string, b: string, c?: ?{}, d?: ?{} }): number => {}
