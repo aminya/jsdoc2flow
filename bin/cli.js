@@ -24,11 +24,12 @@ program
     .option('-v, --verbose', 'Verbose output');
 
 program.parse(process.argv);
+const options = program.opts();
 
-program.ext = program.ext.map(e => e.startsWith('.') ? e : '.' + e);
+options.ext = options.ext.map(e => e.startsWith('.') ? e : '.' + e);
 
 let log = () => {};
-if (program.verbose) {
+if (options.verbose) {
     log = console.log;
 }
 
@@ -36,14 +37,14 @@ const Converter = require('../src');
 const converter = new Converter();
 
 
-if (program.file) {
-    const code = fs.readFileSync(program.file).toString();
+if (options.file) {
+    const code = fs.readFileSync(options.file).toString();
     const modifiedCode = converter.convertSourceCode(code);
     console.log(modifiedCode);
 }
-else if (program.inputDirectory && program.outputDirectory) {
-    const resolvedInputDir = path.resolve(program.inputDirectory);
-    const resolvedOutputDir = path.resolve(program.outputDirectory);
+else if (options.inputDirectory && options.outputDirectory) {
+    const resolvedInputDir = path.resolve(options.inputDirectory);
+    const resolvedOutputDir = path.resolve(options.outputDirectory);
 
     fs.mkdirsSync(resolvedOutputDir);
     const stack = [resolvedInputDir];
@@ -58,10 +59,10 @@ else if (program.inputDirectory && program.outputDirectory) {
                 stack.push(entryPath);
             }
             else {
-                const newPath = path.join(program.outputDirectory,
+                const newPath = path.join(options.outputDirectory,
                     entryPath.replace(resolvedInputDir, ''));
                 fs.mkdirsSync(path.parse(newPath).dir);
-                if (program.ext.includes(entryPathObj.ext)) {
+                if (options.ext.includes(entryPathObj.ext)) {
                     log(`Convert ${entryPath} to ${newPath}`);
                     converter.convertFile(entryPath, newPath);
                 }
