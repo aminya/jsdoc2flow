@@ -20,13 +20,10 @@ program
     .option('-f, --file <file>', 'The file to convert and output to stdout')
     .option('-i, --input-directory <dir>', 'Source directory for original files')
     .option('-o, --output-directory <dir>', 'Destination directory for converted files')
-    .option('--ext [ext]', 'File extension to convert. Can specify multiple extensions. Defaults to \'js\' only.', collect, [])
+    .option('--ext [ext]', 'File extension to convert. Can specify multiple extensions. Defaults to \'js\' only.', collect, ['js'])
     .option('-v, --verbose', 'Verbose output')
     .parse(process.argv);
 
-if (program.ext.length === 0) {
-    program.ext.push('.js');
-}
 program.ext = program.ext.map(e => e.startsWith('.') ? e : '.' + e);
 
 let log = () => {};
