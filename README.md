@@ -63,6 +63,11 @@ Within a project:
 
 ## CLI
 
+Update the files in place:
+```
+> jsdoc2flow -i path/to/input/dir --overwrite
+```
+
 Convert a single file and output to stdout:
 
 ```
