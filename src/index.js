@@ -3,7 +3,7 @@
 const fs = require('fs');
 const espree = require('espree');
 const _ = require('lodash');
-const {createContainer, Lifetime} = require('awilix');
+const {createContainer, Lifetime, asValue} = require('awilix');
 
 const visitorKeys = require('./visitor_keys.js');
 
@@ -41,7 +41,7 @@ class Converter {
         const ast = espree.parse(code, this.espreeOptions);
 
         const scope = this.container.createScope();
-        scope.registerValue({ sourceCode: code });
+        scope.register({ sourceCode: asValue(code) });
         const visitor = scope.cradle.visitor;
 
         let fixes = [];
@@ -100,7 +100,7 @@ class Converter {
 
     _createContainer(options) {
         const container = createContainer();
-        container.registerValue({ useFlowCommentSyntax: options.flowCommentSyntax || true });
+        container.register({ useFlowCommentSyntax: asValue(options.flowCommentSyntax || true) });
         container.loadModules([
             './flow_annotation.js',
             './fixers/*.js',
