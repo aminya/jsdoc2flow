@@ -30,11 +30,8 @@ function determineVarType(varType) {
         return typeSubstitute(varType.name);
     }
     else if (varType.type === 'TypeApplication') {
-        if (varType.expression.type === 'NameExpression' &&
-            varType.applications.every(a => a.type === 'NameExpression')) {
-            const innerTypes = varType.applications.map(a => typeSubstitute(a.name)).join(',');
-            return `${typeSubstitute(varType.expression.name)}<${innerTypes}>`;
-        }
+        const innerTypes = varType.applications.map(a => typeSubstitute(determineVarType(a)));
+        return `${typeSubstitute(determineVarType(varType.expression))}<${innerTypes.join(', ')}>`;
     }
     else if (varType.type === 'OptionalType' || varType.type === 'NullableType') {
         return `?${typeSubstitute(determineVarType(varType.expression))}`;
