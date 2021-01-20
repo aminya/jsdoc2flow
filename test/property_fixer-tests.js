@@ -1,6 +1,6 @@
 'use strict';
 
-require('should');
+const { isCodeEqual } = require('./helper')
 
 const Converter = require('../src');
 const converter = new Converter();
@@ -16,7 +16,7 @@ describe('propertyFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @property {number} count
              */
@@ -40,7 +40,7 @@ describe('propertyFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @property {number} count
              */
@@ -65,7 +65,7 @@ describe('propertyFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @property {number} prop1
              * @property {number} prop2
