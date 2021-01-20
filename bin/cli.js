@@ -9,27 +9,27 @@ const path = require('path');
 const program = require('commander');
 const packageJson = require('../package.json');
 
+program.version(packageJson.version)
+
 function collect(val, list) {
     list.push(val);
     return list;
 }
 
 program
-    .version(packageJson.version)
     .option('-f, --file <file>', 'The file to convert and output to stdout')
     .option('-i, --input-directory <dir>', 'Source directory for original files')
     .option('-o, --output-directory <dir>', 'Destination directory for converted files')
-    .option('--ext [ext]', 'File extension to convert. Can specify multiple extensions. Defaults to \'js\' only.', collect, [])
-    .option('-v, --verbose', 'Verbose output')
-    .parse(process.argv);
+    .option('--ext [ext]', 'File extension to convert. Can specify multiple extensions. Defaults to \'js\' only.', collect, ['js'])
+    .option('-v, --verbose', 'Verbose output');
 
-if (program.ext.length === 0) {
-    program.ext.push('.js');
-}
-program.ext = program.ext.map(e => e.startsWith('.') ? e : '.' + e);
+program.parse(process.argv);
+const options = program.opts();
+
+options.ext = options.ext.map(e => e.startsWith('.') ? e : '.' + e);
 
 let log = () => {};
-if (program.verbose) {
+if (options.verbose) {
     log = console.log;
 }
 
@@ -37,14 +37,14 @@ const Converter = require('../src');
 const converter = new Converter();
 
 
-if (program.file) {
-    const code = fs.readFileSync(program.file).toString();
+if (options.file) {
+    const code = fs.readFileSync(options.file).toString();
     const modifiedCode = converter.convertSourceCode(code);
     console.log(modifiedCode);
 }
-else if (program.inputDirectory && program.outputDirectory) {
-    const resolvedInputDir = path.resolve(program.inputDirectory);
-    const resolvedOutputDir = path.resolve(program.outputDirectory);
+else if (options.inputDirectory && options.outputDirectory) {
+    const resolvedInputDir = path.resolve(options.inputDirectory);
+    const resolvedOutputDir = path.resolve(options.outputDirectory);
 
     fs.mkdirsSync(resolvedOutputDir);
     const stack = [resolvedInputDir];
@@ -59,10 +59,10 @@ else if (program.inputDirectory && program.outputDirectory) {
                 stack.push(entryPath);
             }
             else {
-                const newPath = path.join(program.outputDirectory,
+                const newPath = path.join(options.outputDirectory,
                     entryPath.replace(resolvedInputDir, ''));
                 fs.mkdirsSync(path.parse(newPath).dir);
-                if (program.ext.includes(entryPathObj.ext)) {
+                if (options.ext.includes(entryPathObj.ext)) {
                     log(`Convert ${entryPath} to ${newPath}`);
                     converter.convertFile(entryPath, newPath);
                 }

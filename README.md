@@ -1,5 +1,7 @@
 # jsdoc2flow
 
+![CI](https://github.com/dannysu/jsdoc2flow/workflows/CI/badge.svg)
+
 Note that this is still a Work-In-Progress.
 
 This is a library and CLI tool that reads [JSDoc](http://usejsdoc.org) comments and inserts the corresponding [Flow](https://flowtype.org/) annotations.
