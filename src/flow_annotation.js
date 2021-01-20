@@ -17,7 +17,6 @@ function literalParse(element) {
     } else if (element.type.indexOf('Literal') >= 0) {
         // other types of literals
         const value = typeSubstitute(element.type.replace('Literal', '').toLowerCase());
-        console.warn(`Assuming the value of ${element} to be ${value}`);
         return value;
     } else {
         return null;
