@@ -1,6 +1,6 @@
 'use strict';
 
-require('should');
+const { isCodeEqual } = require('./helper')
 
 const Converter = require('../src');
 const converter = new Converter();
@@ -15,7 +15,7 @@ describe('callbackFixer', function() {
              */
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /*::
             type MyCallback = (arg1: number) => void;
             */
@@ -37,7 +37,7 @@ describe('callbackFixer', function() {
              */
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /*::
             type MyCallback = (arg1: number) => number;
             */
