@@ -1,6 +1,6 @@
 'use strict';
 
-require('should');
+const { isCodeEqual } = require('./helper')
 
 const Converter = require('../src');
 const converter = new Converter();
@@ -13,7 +13,7 @@ describe('typeFixer', function() {
             const count = 1;
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /** @type {number} */
             const count /*: number */ = 1;
             `);
@@ -28,7 +28,7 @@ describe('typeFixer', function() {
             const count = 1;
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             const var1 = 2;
             /** @type {number} */
             const count /*: number */ = 1;
