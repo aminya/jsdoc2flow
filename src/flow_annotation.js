@@ -35,9 +35,7 @@ function determineVarType(varType) {
         }
     }
     else if (varType.type === 'OptionalType' || varType.type === 'NullableType') {
-        if (varType.expression.type === 'NameExpression') {
-            return `?${typeSubstitute(varType.expression.name)}`;
-        }
+        return `?${typeSubstitute(determineVarType(varType.expression))}`;
     }
     else if (varType.type === 'AllLiteral') {
         return 'any';
