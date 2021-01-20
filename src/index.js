@@ -10,9 +10,9 @@ const visitorKeys = require('./visitor_keys.js');
 class Converter {
     constructor(options = {}) {
         this.espreeOptions = {
-            attachComment: true
+            attachComment: true,
+            ecmaVersion: options.ecmaVersion || 2019
         };
-        this.espreeOptions.ecmaVersion = options.ecmaVersion || 6;
 
         this.container = this._createContainer(options);
     }
