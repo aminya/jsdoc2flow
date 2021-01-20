@@ -1,7 +1,7 @@
 'use strict';
 
 function typeSubstitute(typeName) {
-    if (typeName.toLowerCase() === 'object') {
+    if (typeName !== undefined && typeName.toLowerCase() === 'object') {
         return '{}';
     }
     return typeName;
