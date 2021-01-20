@@ -66,6 +66,10 @@ function determineVarType(varType) {
         return `(${paramsNames.join(', ')}) => ${determineVarType(varType.result)}`
     } else if (varType.type === 'ParameterType') {
         return `${varType.name}: ${determineVarType(varType.expression)}`
+    } else if (varType.type === 'ArrayType') {
+        const elements = varType.elements
+        const elementsNames = elements.map(e => determineVarType(e))
+        return `[${elementsNames.join(', ')}]`
     }
     console.warn(`unknown '${varType.type}' type - ${JSON.stringify(varType)}\n`);
 }
