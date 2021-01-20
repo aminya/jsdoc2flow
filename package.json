@@ -12,12 +12,12 @@
     "awilix": "4.3.1",
     "commander": "7.0.0",
     "doctrine": "3.0.0",
+    "eslint": "7.18.0",
     "espree": "^4",
     "fs-extra": "9.1.0",
     "lodash": "4.17.20"
   },
   "devDependencies": {
-    "eslint": "7.18.0",
     "mocha": "8.2.1",
     "prettier": "^2.2.1",
     "should": "13.2.3"

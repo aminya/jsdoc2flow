@@ -1,7 +1,8 @@
-'use strict';
 
 const fs = require('fs');
 const espree = require('espree');
+const { Linter } = require('eslint');
+const linter = new Linter();
 const _ = require('lodash');
 const {createContainer, Lifetime, asValue} = require('awilix');
 
@@ -18,6 +19,7 @@ class Converter {
                 jsx: true,
             }
         };
+        this.options = options;
 
         this.container = this._createContainer(options);
     }
@@ -60,10 +62,26 @@ class Converter {
             }
         }
 
+        if (!this.options.flowCommentSyntax) {
+            // Add arrow parens so we can add types
+            const message = linter.verifyAndFix(code, {
+                parser: 'espree',
+                parserOptions: this.espreeOptions,
+                rules: {
+                    'arrow-parens': 2
+                },
+                fix: true,
+            })
+            if (message.fixed) {
+                code = message.output
+                // reparse
+                ast = espree.parse(code, this.espreeOptions);
+            }
+        }
+
         const scope = this.container.createScope();
         scope.register({ sourceCode: asValue(code) });
         const visitor = scope.cradle.visitor;
-
         let fixes = [];
         this._traverseAST(ast, n => fixes = _.concat(fixes, visitor.visit(n)));
 
