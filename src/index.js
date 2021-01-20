@@ -43,7 +43,22 @@ class Converter {
             code = code.replace(regExp, '');
         }
 
-        const ast = espree.parse(code, this.espreeOptions);
+        let ast;
+        let dynamicImportPatch = false;
+        try {
+            ast = espree.parse(code, this.espreeOptions);
+        } catch(e) {
+            if ((e.message).indexOf('Unexpected token import') >= 0) {
+                dynamicImportPatch = true;
+                // We cannot update espree because attachComment option is removed, so to support `dynamic imports`,
+                // we need to do this hack
+                const dynamicImportRegExp = /import\s*\((.*)\)/;
+                code = code.replace(dynamicImportRegExp, (importGroup, valueGroup) => { return `ESPREE_DYNAMIC_IMPORT(${valueGroup})` });
+                ast = espree.parse(code, this.espreeOptions);
+            } else {
+                throw e;
+            }
+        }
 
         const scope = this.container.createScope();
         scope.register({ sourceCode: asValue(code) });
@@ -57,6 +72,12 @@ class Converter {
             // Put back the first line if it was stripped out before.
             modifiedCode = `${matches[1]}${modifiedCode}`;
         }
+
+        if (dynamicImportPatch) {
+            const dynamicImportRegExp = /ESPREE_DYNAMIC_IMPORT\s*\((.*)\)/;
+            modifiedCode = modifiedCode.replace(dynamicImportRegExp, (importGroup, valueGroup) => { return `import(${valueGroup})` });
+        }
+
         return modifiedCode;
     }
 
