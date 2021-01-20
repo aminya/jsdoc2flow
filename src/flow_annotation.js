@@ -27,16 +27,23 @@ function determineVarType(varType) {
         return 'any';
     }
     else if (varType.type === 'UnionType') {
-        const types = [];
-        let allNameExpressions = true;
+        let types = [];
         for (const element of varType.elements) {
-            if (element.type !== 'NameExpression') {
-                allNameExpressions = false;
+            if (element.type === 'NameExpression') {
+                types.push(typeSubstitute(element.name));
+            } else if (element.type === 'NullLiteral') {
+                types.push(typeSubstitute('null'));
+            } else if (element.type === 'UndefinedLiteral') {
+                types.push(typeSubstitute('undefined'));
+            } else if (element.type.indexOf('Literal') >= 0) {
+                // other types of literals
+                const value = typeSubstitute(element.type.replace('Literal', '').toLowerCase());
+                types.push(value);
+                console.warn(`Assuming the value of ${element} to be ${value}`);
+            } else {
+                types.push(element.type);
+                console.log(`unknown element ${element}`);
             }
-            types.push(typeSubstitute(element.name));
-        }
-        if (!allNameExpressions) {
-            throw new Error('union type not all NameExpressions');
         }
         return types.join(' | ');
     }
