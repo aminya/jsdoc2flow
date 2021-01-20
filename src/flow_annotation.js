@@ -59,6 +59,10 @@ function determineVarType(varType) {
         return types.join(' | ');
     } else if (varType.type.indexOf('Literal') >= 0) {
         return literalParse(varType);
+    } else if (varType.type === 'FunctionType') {
+        const params = varType.params
+        const paramsNames = params.map(p => determineVarType(p))
+        return `(${paramsNames.join(', ')}) => ${determineVarType(varType.result)}`
     } else if (varType.type === 'ParameterType') {
         return `${varType.name}: ${determineVarType(varType.expression)}`
     }
