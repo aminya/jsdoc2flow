@@ -15,7 +15,7 @@ describe('typeFixer', function() {
             const modifiedCode = converter.convertSourceCode(code);
             isCodeEqual(modifiedCode, `
             /** @type {number} */
-            const count /*: number */ = 1;
+            const count : number = 1;
             `);
         });
     });
@@ -31,7 +31,7 @@ describe('typeFixer', function() {
             isCodeEqual(modifiedCode, `
             const var1 = 2;
             /** @type {number} */
-            const count /*: number */ = 1;
+            const count : number = 1;
             `);
         });
     });
