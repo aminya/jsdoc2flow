@@ -645,4 +645,25 @@ describe('paramFixer', function() {
             `);
         });
     });
+
+    describe('Function types', function() {
+        it('should work', function() {
+            const code = `
+            /**
+             * @param  {function(event:Object):void} callback
+             */
+            function onDidChange (callback) {
+            }
+            `;
+            const modifiedCode = converter.convertSourceCode(code);
+            isCodeEqual(modifiedCode, `
+            /**
+             * @param  {function(event:Object):void} callback
+             */
+             function onDidChange (callback: (event:Object) => void) {
+             }
+            `);
+        });
+    });
+
 });
