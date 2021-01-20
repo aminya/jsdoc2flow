@@ -53,7 +53,7 @@ function determineVarType(varType) {
         const elementsNames = elements.map(e => determineVarType(e))
         return `[${elementsNames.join(', ')}]`
     }
-    console.warn(`unknown '${varType.type}' type - ${JSON.stringify(varType)}
+    console.warn(`Warning: unknown '${varType.type}' type - ${JSON.stringify(varType)}
         Open an issue at https://github.com/aminya/jsdoc2flow/issues/new
     `);
 }
