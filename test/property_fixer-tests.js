@@ -21,9 +21,9 @@ describe('propertyFixer', function() {
              * @property {number} count
              */
             class Test {
-            /*::
+
             count: number;
-            */
+
             }
             `);
         });
@@ -46,9 +46,9 @@ describe('propertyFixer', function() {
              */
             class Test
             {
-            /*::
+
             count: number;
-            */
+
             }
             `);
         });
@@ -71,10 +71,10 @@ describe('propertyFixer', function() {
              * @property {number} prop2
              */
             class Test {
-            /*::
+
             prop1: number;
             prop2: number;
-            */
+
             }
             `);
         });

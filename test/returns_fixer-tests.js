@@ -20,7 +20,7 @@ describe('returnsFixer', function() {
             /**
              * @returns {number}
              */
-            function test() /*: number */ {
+            function test() : number {
             }
             `);
         });
@@ -41,7 +41,7 @@ describe('returnsFixer', function() {
             /**
              * @returns {number}
              */
-            function test() /*: number */
+            function test() : number
             {
             }
             `);
@@ -66,7 +66,7 @@ describe('returnsFixer', function() {
              */
             function test(
                 a, b, c
-            ) /*: number */ {
+            ) : number {
             }
             `);
         });
@@ -89,7 +89,7 @@ describe('returnsFixer', function() {
                 /**
                  * @returns {number}
                  */
-                test() /*: number */ {
+                test() : number {
                 }
             }
             `);
@@ -110,7 +110,7 @@ describe('returnsFixer', function() {
             /**
              * @returns {number}
              */
-            Something.prototype.test = () /*: number */ => {
+            Something.prototype.test = () : number => {
             }
             `);
         });
@@ -130,7 +130,7 @@ describe('returnsFixer', function() {
             /**
              * @returns {number}
              */
-            Something.prototype.test = function() /*: number */ {
+            Something.prototype.test = function() : number {
             }
             `);
         });
@@ -150,7 +150,7 @@ describe('returnsFixer', function() {
             /**
              * @returns {number}
              */
-            const test = function() /*: number */ {
+            const test = function() : number {
             }
             `);
         });
@@ -173,7 +173,7 @@ describe('returnsFixer', function() {
                 /**
                  * @returns {number}
                  */
-                foo: function() /*: number */ {
+                foo: function() : number {
                 }
             };
             `);
@@ -194,14 +194,14 @@ describe('returnsFixer', function() {
             /**
              * @returns {number}
              */
-            const test = (a) /*: number */ => {
+            const test = (a) : number => {
             };
             `);
         });
     });
 
     describe('return type for arrow function without brackets', function() {
-        it('should work but does not change anything', function() {
+        it('should work', function() {
             const code = `
             /**
              * @returns {number}
@@ -214,7 +214,7 @@ describe('returnsFixer', function() {
             /**
              * @returns {number}
              */
-            const test = a => {
+            const test = (a): number => {
             };
             `);
         });
@@ -234,7 +234,7 @@ describe('returnsFixer', function() {
             /**
              * @returns {Promise<number>}
              */
-            function test() /*: Promise<number> */ {
+            function test() : Promise<number>  {
             };
             `);
         });

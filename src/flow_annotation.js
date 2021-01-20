@@ -64,7 +64,7 @@ function determineVarType(varType) {
 }
 
 class FlowAnnotation {
-    constructor({ useFlowCommentSyntax = true } = {}) {
+    constructor({ useFlowCommentSyntax = false } = {}) {
         if (useFlowCommentSyntax) {
             this.inlinePre = ' /*';
             this.inlinePost = ' */';
