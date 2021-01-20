@@ -1,6 +1,6 @@
 'use strict';
 
-require('should');
+const { isCodeEqual } = require('./helper')
 
 const Converter = require('../src');
 const converter = new Converter();
@@ -14,7 +14,7 @@ describe('typedefFixer', function() {
              */
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /*::
             type MyNumber = number;
             */
@@ -33,7 +33,7 @@ describe('typedefFixer', function() {
              */
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /*::
             type MyUnion = number | boolean;
             */
@@ -54,7 +54,7 @@ describe('typedefFixer', function() {
              */
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /*::
             type MyObject = {
               prop1: boolean,
@@ -79,7 +79,7 @@ describe('typedefFixer', function() {
              */
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @typedef MyNumber
              * @type {number}
