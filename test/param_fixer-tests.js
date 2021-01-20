@@ -40,7 +40,7 @@ describe('paramFixer', function() {
             /**
              * @param {object} obj
              */
-            function test(obj /*: {  } */) {
+            function test(obj : {  }) {
             }
             `);
         });
@@ -60,7 +60,7 @@ describe('paramFixer', function() {
             /**
              * @param {number} a
              */
-            function test(a /*: number */) {
+            function test(a : number) {
             }
             `);
         });
@@ -80,7 +80,7 @@ describe('paramFixer', function() {
             /**
              * @param {number} a
              */
-            Something.prototype.test = function(a /*: number */) {
+            Something.prototype.test = function(a : number) {
             }
             `);
         });
@@ -100,7 +100,7 @@ describe('paramFixer', function() {
             /**
              * @param {number} a
              */
-            const test = function(a /*: number */) {
+            const test = function(a : number) {
             }
             `);
         });
@@ -123,7 +123,7 @@ describe('paramFixer', function() {
                 /**
                  * @param {number} a
                  */
-                foo: function(a /*: number */) {
+                foo: function(a : number) {
                 }
             };
             `);
@@ -144,7 +144,7 @@ describe('paramFixer', function() {
             /**
              * @param {number} a
              */
-            const test = (a /*: number */) => {
+            const test = (a : number) => {
             };
             `);
         });
@@ -168,7 +168,7 @@ describe('paramFixer', function() {
              * @param {number} obj.a
              * @param {number} obj.b
              */
-            e.test = ({ a, b } /*: { a: number, b: number } */) => {
+            e.test = ({ a, b } : { a: number, b: number }) => {
             };
             `);
         });
@@ -188,7 +188,7 @@ describe('paramFixer', function() {
             /**
              * @param {number} a
              */
-            const test = a /*: number */ => {
+            const test = (a : number) => {
             };
             `);
         });
@@ -211,7 +211,7 @@ describe('paramFixer', function() {
                 /**
                  * @param {number} a
                  */
-                test(a /*: number */) {
+                test(a : number) {
                 }
             }
             `);
@@ -234,7 +234,7 @@ describe('paramFixer', function() {
              * @param {object} obj
              * @param {number=} obj.a
              */
-            function test({ a = 1 } /*: { a?: number } */) {
+            function test({ a = 1 } : { a?: number } ) {
             }
             `);
         });
@@ -254,7 +254,7 @@ describe('paramFixer', function() {
             /**
              * @param {number} [a=1]
              */
-            function test(a /*: number */) {
+            function test(a : number) {
             }
             `);
         });
@@ -274,7 +274,7 @@ describe('paramFixer', function() {
             /**
              * @param {number=} a
              */
-            function test(a /*: ?number */) {
+            function test(a: ?number) {
             }
             `);
         });
@@ -314,7 +314,7 @@ describe('paramFixer', function() {
             /**
              * @param {*} a
              */
-            function test(a /*: any */) {
+            function test(a : any) {
             }
             `);
         });
@@ -334,7 +334,7 @@ describe('paramFixer', function() {
             /**
              * @param {number|boolean} a
              */
-            function test(a /*: number | boolean */) {
+            function test(a: number | boolean) {
             }
             `);
         });
@@ -354,7 +354,7 @@ describe('paramFixer', function() {
             /**
              * @param {number} a
              */
-            function test(a /*: number */ = 1) {
+            function test(a : number = 1) {
             }
             `);
         });
@@ -376,7 +376,47 @@ describe('paramFixer', function() {
              * @param {object} obj
              * @param {number} obj.a
              */
-            function test({ a } /*: { a: number } */) {
+            function test({ a } : { a: number } ) {
+            }
+            `);
+        });
+
+        it('should work', function() {
+            const code = `
+            /**
+             * @param {object} obj
+             * @param {number=} obj.a
+             */
+            function test({ a }) {
+            }
+            `;
+            const modifiedCode = converter.convertSourceCode(code);
+            isCodeEqual(modifiedCode, `
+            /**
+             * @param {object} obj
+             * @param {number=} obj.a
+             */
+            function test({ a } : { a?: ?number } ) {
+            }
+            `);
+        });
+
+        it('should work', function() {
+            const code = `
+            /**
+             * @param {object} obj
+             * @param {number} obj.a
+             */
+            function test({ a } = {a: 1}) {
+            }
+            `;
+            const modifiedCode = converter.convertSourceCode(code);
+            isCodeEqual(modifiedCode, `
+            /**
+             * @param {object} obj
+             * @param {number} obj.a
+             */
+            function test({ a } : { a: number } = {a: 1}) {
             }
             `);
         });
@@ -406,7 +446,7 @@ describe('paramFixer', function() {
              * @param {number} obj.d.e
              * @param {string} f
              */
-            function test(a /*: number */, obj /*: { c: number, d: { e: number } } */, f /*: string */) {
+            function test(a : number, obj : { c: number, d: { e: number } } , f : string ) {
             }
             `);
         });
@@ -436,7 +476,7 @@ describe('paramFixer', function() {
              * @param {number=} obj.d.e
              * @param {string} f
              */
-            function test(a /*: number */, obj /*: { c?: ?number, d?: { e?: ?number } } */, f /*: string */) {
+            function test(a : number, obj : { c?: ?number, d?: { e?: ?number } } , f : string ) {
             }
             `);
         });
@@ -468,7 +508,7 @@ describe('paramFixer', function() {
              * @param {object} obj2.d
              * @param {number} obj2.d.e
              */
-            function test(a /*: number */, { b } /*: { b: number } */, { c, d: { e } } /*: { c: number, d: { e: number } } */) {
+            function test(a : number, { b } : { b: number } , { c, d: { e } } : { c: number, d: { e: number } } ) {
             }
             `);
         });
@@ -490,7 +530,7 @@ describe('paramFixer', function() {
              * @param {object} obj
              * @param {number} obj.a
              */
-            function test({ a = 1 } /*: { a: number } */) {
+            function test({ a = 1 } : { a: number } ) {
             }
             `);
         });
@@ -514,7 +554,7 @@ describe('paramFixer', function() {
              * @param {object} obj1.a
              * @param {number} obj1.a.b
              */
-            function test({ a: { b } } /*: { a: { b: number } } */) {
+            function test({ a: { b } } : { a: { b: number } } ) {
             }
             `);
         });
@@ -538,7 +578,7 @@ describe('paramFixer', function() {
              * @param {object} obj1.a
              * @param {number} obj1.a.b
              */
-            function test({ a: { b = 1 } } /*: { a: { b: number } } */) {
+            function test({ a: { b = 1 } } : { a: { b: number } } ) {
             }
             `);
         });
@@ -558,7 +598,7 @@ describe('paramFixer', function() {
             /**
              * @param {number[]} a
              */
-            function test(a /*: Array<number> */) {
+            function test(a : Array<number> ) {
             }
             `);
         });
@@ -580,7 +620,7 @@ describe('paramFixer', function() {
              * @param {object[]} obj
              * @param {number} obj[].a
              */
-            function test(obj /*: Array<{}> */) {
+            function test(obj : Array<{}> ) {
             }
             `);
         });
@@ -600,7 +640,7 @@ describe('paramFixer', function() {
             /**
              * @param {number} theArgs
              */
-            function test(...theArgs /*: Array<number> */) {
+            function test(...theArgs : Array<number> ) {
             }
             `);
         });
