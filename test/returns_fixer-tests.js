@@ -201,7 +201,7 @@ describe('returnsFixer', function() {
     });
 
     describe('return type for arrow function without brackets', function() {
-        it('should work but does not change anything', function() {
+        it('should work', function() {
             const code = `
             /**
              * @returns {number}
@@ -214,7 +214,7 @@ describe('returnsFixer', function() {
             /**
              * @returns {number}
              */
-            const test = a => {
+            const test = (a): number => {
             };
             `);
         });
