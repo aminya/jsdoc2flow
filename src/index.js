@@ -129,7 +129,7 @@ class Converter {
 
     _createContainer(options) {
         const container = createContainer();
-        container.register({ useFlowCommentSyntax: asValue(options.flowCommentSyntax || true) });
+        container.register({ useFlowCommentSyntax: asValue(options.flowCommentSyntax || false) });
         container.loadModules([
             './flow_annotation.js',
             './fixers/*.js',
