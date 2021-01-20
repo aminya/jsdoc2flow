@@ -16,9 +16,9 @@ describe('callbackFixer', function() {
             `;
             const modifiedCode = converter.convertSourceCode(code);
             isCodeEqual(modifiedCode, `
-            /*::
+
             type MyCallback = (arg1: number) => void;
-            */
+
             /**
              * @callback MyCallback
              * @param {number} arg1
@@ -38,9 +38,9 @@ describe('callbackFixer', function() {
             `;
             const modifiedCode = converter.convertSourceCode(code);
             isCodeEqual(modifiedCode, `
-            /*::
+
             type MyCallback = (arg1: number) => number;
-            */
+
             /**
              * @callback MyCallback
              * @param {number} arg1
