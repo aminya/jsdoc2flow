@@ -23,12 +23,12 @@ function getResult(count) {
 ```
 into:
 ```javascript
-/*::
+
 type Result = {
   id: string,
   count: number
 };
-*/
+
 /**
  * @typedef {object} Result
  * @property {string} id
@@ -39,15 +39,10 @@ type Result = {
  * @param {number} count
  * @returns {Result}
  */
-function getResult(count /*: number */) /*: Result */ {
+function getResult(count: number): Result {
 }
 ```
 
-## Benefits
-- No need to transpile but still get the benefits of type checking
-- Compatibility with IDEs such as WebStorm
-  - Currently WebStorm doesn't support [Flow comment syntax](https://flowtype.org/blog/2015/02/20/Flow-Comments.html), so it's either transpile or nothing
-- Benefit from existing JSDoc comments
 
 ## Inspiration
 This is inspired by [flow-jsdoc](https://github.com/Kegsay/flow-jsdoc), but is a totally separate implementation of the same idea. This uses the [Espree](https://github.com/eslint/espree) parser instead and implements some of the things flow-jsdoc is missing.
