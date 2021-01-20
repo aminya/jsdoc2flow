@@ -69,8 +69,10 @@ if (options.file) {
           log(`Convert ${entryPath} to ${newPath}`)
           converter.convertFile(entryPath, newPath)
         } else {
-          log(`Copy ${entryPath} to ${newPath}`)
-          fs.copySync(entryPath, newPath, {overwrite: true})
+          if (path.resolve(entryPath) !== path.resolve(newPath)) {
+            log(`Copy ${entryPath} to ${newPath}`)
+            fs.copySync(entryPath, newPath, {overwrite: true})
+          }
         }
       }
     }
