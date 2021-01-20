@@ -43,10 +43,6 @@ type Result = {
 function getResult(count: number): Result {}
 ```
 
-## Inspiration
-
-This is inspired by [flow-jsdoc](https://github.com/Kegsay/flow-jsdoc), but is a totally separate implementation of the same idea. This uses the [Espree](https://github.com/eslint/espree) parser instead and implements some of the things flow-jsdoc is missing.
-
 # Usage
 
 Note that you still need to add `// @flow` yourself to the top of the files to be checked by Flow.
@@ -77,6 +73,22 @@ Convert a directory of files and output to a new location:
 
 ```
 > jsdoc2flow -i path/to/input/dir -o path/to/output/dir
+```
+
+All options:
+```
+Usage: cli [options]
+
+Options:
+  -V, --version                 output the version number
+  -f, --file <file>             The file to convert and output to stdout
+  -i, --input-directory <dir>   Source directory for original files
+  -w, --overwrite               Overwrite the original files
+  -o, --output-directory <dir>  Destination directory for converted files
+  --ext [ext]                   File extension to convert. Can specify multiple extensions. Defaults to 'js' only.
+                                (default: ["js"])
+  -v, --verbose                 Verbose output
+  -h, --help                    display help for command
 ```
 
 ## Code
@@ -145,3 +157,8 @@ const count = 1;
 /** @type {MyObject} */
 const obj;
 ```
+
+
+## Inspiration
+
+This is inspired by [flow-jsdoc](https://github.com/Kegsay/flow-jsdoc), but is a totally separate implementation of the same idea. This uses the [Espree](https://github.com/eslint/espree) parser instead and implements some of the things flow-jsdoc is missing.
