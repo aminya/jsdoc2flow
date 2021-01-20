@@ -15,9 +15,9 @@ describe('typedefFixer', function() {
             `;
             const modifiedCode = converter.convertSourceCode(code);
             isCodeEqual(modifiedCode, `
-            /*::
+
             type MyNumber = number;
-            */
+
             /**
              * @typedef {number} MyNumber
              */
@@ -34,9 +34,9 @@ describe('typedefFixer', function() {
             `;
             const modifiedCode = converter.convertSourceCode(code);
             isCodeEqual(modifiedCode, `
-            /*::
+
             type MyUnion = number | boolean;
-            */
+
             /**
              * @typedef {number|boolean} MyUnion
              */
@@ -55,12 +55,12 @@ describe('typedefFixer', function() {
             `;
             const modifiedCode = converter.convertSourceCode(code);
             isCodeEqual(modifiedCode, `
-            /*::
+
             type MyObject = {
               prop1: boolean,
               prop2: boolean
             };
-            */
+
             /**
              * @typedef {object} MyObject
              * @property {boolean} prop1
