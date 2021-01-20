@@ -11,7 +11,8 @@ class Converter {
     constructor(options = {}) {
         this.espreeOptions = {
             attachComment: true,
-            ecmaVersion: options.ecmaVersion || 2019
+            ecmaVersion: options.ecmaVersion || 2019,
+            sourceType: options.sourceType || "module"
         };
 
         this.container = this._createContainer(options);
