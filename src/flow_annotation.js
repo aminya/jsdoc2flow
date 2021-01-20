@@ -118,6 +118,9 @@ class FlowAnnotation {
             const nameParts = tag.name.split('.');
 
             let type = determineVarType(tag.type);
+            if (type === undefined) {
+                continue;
+            }
 
             let name = nameParts[nameParts.length - 1];
             const idEntry = ids.find(i => i.id === name);
