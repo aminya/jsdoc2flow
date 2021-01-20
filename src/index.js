@@ -70,6 +70,9 @@ class Converter {
             }
 
             const keys = visitorKeys[node.type];
+            if (keys === undefined) {
+                continue;
+            }
             for (const key of keys) {
                 const prop = node[key];
                 if (Array.isArray(prop)) {
