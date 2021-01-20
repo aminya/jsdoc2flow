@@ -1,6 +1,6 @@
 'use strict';
 
-require('should');
+const { isCodeEqual } = require('./helper')
 
 const Converter = require('../src');
 const converter = new Converter();
@@ -16,7 +16,7 @@ describe('returnsFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @returns {number}
              */
@@ -37,7 +37,7 @@ describe('returnsFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @returns {number}
              */
@@ -60,7 +60,7 @@ describe('returnsFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @returns {number}
              */
@@ -84,7 +84,7 @@ describe('returnsFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             class Test {
                 /**
                  * @returns {number}
@@ -106,7 +106,7 @@ describe('returnsFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @returns {number}
              */
@@ -126,7 +126,7 @@ describe('returnsFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @returns {number}
              */
@@ -146,7 +146,7 @@ describe('returnsFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @returns {number}
              */
@@ -168,7 +168,7 @@ describe('returnsFixer', function() {
             };
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             const obj = {
                 /**
                  * @returns {number}
@@ -190,7 +190,7 @@ describe('returnsFixer', function() {
             };
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @returns {number}
              */
@@ -210,7 +210,7 @@ describe('returnsFixer', function() {
             };
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @returns {number}
              */
@@ -230,7 +230,7 @@ describe('returnsFixer', function() {
             };
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @returns {Promise<number>}
              */

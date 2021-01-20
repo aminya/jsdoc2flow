@@ -1,8 +1,7 @@
 'use strict';
 
-require('should');
 const fs = require('fs');
-const { format } = require("prettier");
+const { isCodeEqual } = require('./helper')
 
 const Converter = require('../src');
 const converter = new Converter();
@@ -16,7 +15,7 @@ describe('full file', function() {
             const code = fs.readFileSync(`${orig}/test1.js`).toString();
             const modifiedCode = converter.convertSourceCode(code);
             const expected = fs.readFileSync(`${annotated}/test1.js`).toString();
-            format(modifiedCode).should.be.eql(format(expected));
+            isCodeEqual(modifiedCode, expected);
         });
     });
 
@@ -25,7 +24,7 @@ describe('full file', function() {
             const code = fs.readFileSync(`${orig}/test2.js`).toString();
             const modifiedCode = converter.convertSourceCode(code);
             const expected = fs.readFileSync(`${annotated}/test2.js`).toString();
-            format(modifiedCode).should.be.eql(format(expected));
+            isCodeEqual(modifiedCode, expected);
         });
     });
 });

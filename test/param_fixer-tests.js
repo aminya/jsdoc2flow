@@ -1,6 +1,6 @@
 'use strict';
 
-require('should');
+const { isCodeEqual } = require('./helper')
 
 const Converter = require('../src');
 const converter = new Converter();
@@ -16,7 +16,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param a
              */
@@ -36,7 +36,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {object} obj
              */
@@ -56,7 +56,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {number} a
              */
@@ -76,7 +76,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {number} a
              */
@@ -96,7 +96,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {number} a
              */
@@ -118,7 +118,7 @@ describe('paramFixer', function() {
             };
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             const obj = {
                 /**
                  * @param {number} a
@@ -140,7 +140,7 @@ describe('paramFixer', function() {
             };
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {number} a
              */
@@ -162,7 +162,7 @@ describe('paramFixer', function() {
             };
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {object} obj
              * @param {number} obj.a
@@ -184,7 +184,7 @@ describe('paramFixer', function() {
             };
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {number} a
              */
@@ -206,7 +206,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             class Test {
                 /**
                  * @param {number} a
@@ -229,7 +229,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {object} obj
              * @param {number=} obj.a
@@ -250,7 +250,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {number} [a=1]
              */
@@ -270,7 +270,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {number=} a
              */
@@ -290,7 +290,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {number} [a]
              */
@@ -310,7 +310,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {*} a
              */
@@ -330,7 +330,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {number|boolean} a
              */
@@ -350,7 +350,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {number} a
              */
@@ -371,7 +371,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {object} obj
              * @param {number} obj.a
@@ -397,7 +397,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {number} a
              * @param {object} obj
@@ -427,7 +427,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {number} a
              * @param {object} obj
@@ -458,7 +458,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {number} a
              * @param {object} obj1
@@ -485,7 +485,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {object} obj
              * @param {number} obj.a
@@ -508,7 +508,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {object} obj1
              * @param {object} obj1.a
@@ -532,7 +532,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {object} obj1
              * @param {object} obj1.a
@@ -554,7 +554,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {number[]} a
              */
@@ -575,7 +575,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {object[]} obj
              * @param {number} obj[].a
@@ -596,7 +596,7 @@ describe('paramFixer', function() {
             }
             `;
             const modifiedCode = converter.convertSourceCode(code);
-            modifiedCode.should.be.eql(`
+            isCodeEqual(modifiedCode, `
             /**
              * @param {number} theArgs
              */
