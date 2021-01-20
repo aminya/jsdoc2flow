@@ -12,7 +12,11 @@ class Converter {
         this.espreeOptions = {
             attachComment: true,
             ecmaVersion: options.ecmaVersion || 2019,
-            sourceType: options.sourceType || "module"
+            sourceType: options.sourceType || "module",
+            ecmaFeatures: options.ecmaFeatures || {
+                // enable JSX parsing
+                jsx: true,
+            }
         };
 
         this.container = this._createContainer(options);
