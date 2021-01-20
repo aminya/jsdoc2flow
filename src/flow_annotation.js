@@ -59,6 +59,8 @@ function determineVarType(varType) {
         return types.join(' | ');
     } else if (varType.type.indexOf('Literal') >= 0) {
         return literalParse(varType);
+    } else if (varType.type === 'ParameterType') {
+        return `${varType.name}: ${determineVarType(varType.expression)}`
     }
     console.warn(`unknown '${varType.type}' type - ${JSON.stringify(varType)}\n`);
 }
