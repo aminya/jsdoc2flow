@@ -40,11 +40,9 @@ function determineVarType(varType) {
         return `?${typeSubstitute(determineVarType(varType.expression))}`;
     }
     else if (varType.type === 'UnionType') {
-        let types = [];
-        for (const element of varType.elements) {
-            types.push(determineVarType(element))
-        }
-        return types.join(' | ');
+        const elements = varType.elements
+        const elementsNames = elements.map(e => determineVarType(e))
+        return elementsNames.join(' | ');
     } else if (varType.type.indexOf('Literal') >= 0) {
         return literalParse(varType);
     } else if (varType.type === 'FunctionType') {
