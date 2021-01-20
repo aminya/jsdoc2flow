@@ -12,7 +12,7 @@
     "awilix": "4.3.1",
     "commander": "7.0.0",
     "doctrine": "3.0.0",
-    "espree": "3.5.0",
+    "espree": "^4",
     "fs-extra": "9.1.0",
     "lodash": "4.17.20"
   },
