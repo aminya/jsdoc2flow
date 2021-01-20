@@ -45,17 +45,7 @@ function determineVarType(varType) {
     else if (varType.type === 'UnionType') {
         let types = [];
         for (const element of varType.elements) {
-            if (element.type === 'NameExpression') {
-                types.push(typeSubstitute(element.name));
-            } else {
-                const value = literalParse(element);
-                if (value !== null) {
-                    types.push(value);
-                } else {
-                    types.push(element.type);
-                    console.log(`unknown element ${element}`);
-                }
-            }
+            types.push(determineVarType(element))
         }
         return types.join(' | ');
     } else if (varType.type.indexOf('Literal') >= 0) {
