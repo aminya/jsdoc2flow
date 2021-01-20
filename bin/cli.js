@@ -9,13 +9,14 @@ const path = require('path');
 const program = require('commander');
 const packageJson = require('../package.json');
 
+program.version(packageJson.version)
+
 function collect(val, list) {
     list.push(val);
     return list;
 }
 
 program
-    .version(packageJson.version)
     .option('-f, --file <file>', 'The file to convert and output to stdout')
     .option('-i, --input-directory <dir>', 'Source directory for original files')
     .option('-o, --output-directory <dir>', 'Destination directory for converted files')
