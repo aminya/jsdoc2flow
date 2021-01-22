@@ -1,8 +1,8 @@
 # jsdoc2flow
 
-![CI](https://github.com/dannysu/jsdoc2flow/workflows/CI/badge.svg)
+Convert JSDoc comments into Flow annotations
 
-Note that this is still a Work-In-Progress.
+![CI](https://github.com/dannysu/jsdoc2flow/workflows/CI/badge.svg)
 
 This is a library and CLI tool that reads [JSDoc](http://usejsdoc.org) comments and inserts the corresponding [Flow](https://flowtype.org/) annotations.
 
@@ -98,7 +98,7 @@ Options:
   -h, --help                    display help for command
 ```
 
-## Code
+## API
 
 ```javascript
 const Converter = require("jsdoc2flow")

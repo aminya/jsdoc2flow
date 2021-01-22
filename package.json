@@ -1,7 +1,7 @@
 {
   "name": "jsdoc2flow",
-  "version": "0.1.2",
-  "description": "Reads JSDoc comments and inserts corresponding Flow annotations",
+  "version": "0.9.0",
+  "description": "Convert JSDoc comments into Flow annotations",
   "main": "src/index.js",
   "scripts": {
     "format": "prettier --write .",
