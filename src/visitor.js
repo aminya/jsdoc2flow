@@ -75,25 +75,33 @@ class Visitor {
     for (const comment of newComments) {
       // Doctrine
       const resultDoctrine = parseDoctrine(comment)
-
-      // Comment-Parser
-      const resultCommentParser = parseCommentParser(comment)
-
-      const tagsCommentParser = resultCommentParser.tags
       const tagsDoctrine = resultDoctrine.tags
 
-      // final tags
-      let tags = tagsDoctrine
+      // Comment-Parser
+      let resultCommentParser = parseCommentParser(comment)[0]
 
-      if (tagsCommentParser) {
-        if (tagsCommentParser.length !== tagsDoctrine.length) {
-          // happens when comment parser supports something but doctorine does not
-          // console.log({ resultCommentParser, resultDoctrine })
-        } else {
-          // merge comment parser info into doctorine
-          for (let iTag = 0; iTag < tagsDoctrine.length; iTag++) {
-            tags[iTag] = injectCommentParserToDoctrine(tagsDoctrine[iTag], tagsCommentParser[iTag])
-          }
+      let tagsCommentParser
+      if (resultCommentParser) {
+        // normally
+        tagsCommentParser = resultCommentParser.tags
+      } else {
+        // fallback to doctrine without typeText
+        tagsCommentParser = tagsDoctrine
+        for (let iTag = 0; iTag < tagsDoctrine.length; iTag++) {
+          tagsCommentParser[iTag] = injectCommentParserToDoctrine(tagsDoctrine[iTag], {})
+        }
+      }
+
+      // final tags
+      let tags = tagsCommentParser
+
+      if (tagsCommentParser.length !== tagsDoctrine.length) {
+        // happens when comment parser supports something but doctorine does not
+        // console.log({ resultCommentParser, resultDoctrine })
+      } else {
+        // merge comment parser info into doctorine
+        for (let iTag = 0; iTag < tagsDoctrine.length; iTag++) {
+          tags[iTag] = injectDoctrineToCommentParser(tagsDoctrine[iTag], tagsCommentParser[iTag])
         }
       }
 
