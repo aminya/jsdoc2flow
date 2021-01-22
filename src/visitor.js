@@ -37,20 +37,30 @@ function injectDoctrineToCommentParser(tagDoctrine, tagCommentParser) {
 
 
 function parseDoctrine(comment) {
-  // doctrine doesn't support default values, so modify the comment
-  // value prior to feeding it to doctrine.
-  let commentValueDoctrine = comment.value
-  const paramRegExp = /(@param\s+{[^}]+}\s+)\[([^=])+=[^\]]+\]/g
-  commentValueDoctrine = commentValueDoctrine.replace(paramRegExp, (match, p1, p2) => {
-    return `${p1}${p2}`
-  })
-  return doctrine.parse(commentValueDoctrine, { unwrap: true })
+  try {
+    // doctrine doesn't support default values, so modify the comment
+    // value prior to feeding it to doctrine.
+    let commentValueDoctrine = comment.value
+    const paramRegExp = /(@param\s+{[^}]+}\s+)\[([^=])+=[^\]]+\]/g
+    commentValueDoctrine = commentValueDoctrine.replace(paramRegExp, (match, p1, p2) => {
+      return `${p1}${p2}`
+    })
+    return doctrine.parse(commentValueDoctrine, { unwrap: true })
+  } catch(e) {
+    console.warn(e)
+    return {tags: []}
+  }
 }
 
 function parseCommentParser(comment) {
-  // add jsdoc around the comment value so comment-parser can parse it correctly
-  const commentValueCommentParser = `/*${comment.value}*/`
-  return parse(commentValueCommentParser)
+  try {
+    // add jsdoc around the comment value so comment-parser can parse it correctly
+    const commentValueCommentParser = `/*${comment.value}*/`
+    return parse(commentValueCommentParser)
+  } catch(e) {
+    console.warn(e)
+    return {tags: []}
+  }
 }
 
 class Visitor {
