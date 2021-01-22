@@ -4,6 +4,7 @@ const { Linter } = require("eslint")
 const linter = new Linter()
 const _ = require("lodash")
 const { createContainer, Lifetime, asValue } = require("awilix")
+const babelParser = require("@babel/parser")
 
 const visitorKeys = require("./visitor_keys.js")
 
@@ -98,6 +99,24 @@ class Converter {
         return `import(${valueGroup})`
       })
     }
+
+    // Check if the generated code is valid
+    try {
+      babelParser.parse(modifiedCode, {
+        // parse in strict mode and allow module declarations
+        sourceType: this.espreeOptions.sourceType,
+
+        plugins: [
+          // enable jsx and flow syntax
+          "jsx",
+          "flow",
+          "flowComments",
+        ],
+      })
+    } catch(e) {
+      console.warn(e)
+    }
+
 
     return modifiedCode
   }
