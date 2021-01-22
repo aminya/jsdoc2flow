@@ -71,13 +71,14 @@ class Visitor {
     const newComments = []
     let allComments = _.uniq(_.concat(node.leadingComments || [], node.comments || [], node.trailingComments || []))
 
-    for (let iComment = 0; iComment < allComments.length; iComment++) {
-      // if there is a line comment in between descard before it
-      if (allComments[iComment].type === "Line") {
-        allComments = allComments.slice(iComment + 1) // if iComment === len returns []
-        // recursive
-      }
-    }
+    // find a way to detect doc string that is related to commented code
+    // for (let iComment = 0; iComment < allComments.length; iComment++) {
+    //   // if there is a line comment in between descard before it
+    //   if (allComments[iComment].type === "Line") {
+    //     allComments = allComments.slice(iComment + 1) // if iComment === len returns []
+    //     // recursive
+    //   }
+    // }
 
     allComments.forEach((comment) => {
       const found = this.visitedComments.find((visited) => _.isEqual(comment, visited))
