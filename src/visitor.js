@@ -54,7 +54,7 @@ function parseCommentParser(comment) {
   try {
     // add jsdoc around the comment value so comment-parser can parse it correctly
     const commentValueCommentParser = `/*${comment.value}*/`
-    return parse(commentValueCommentParser)
+    return parse(commentValueCommentParser)[0]
   } catch(e) {
     console.warn(e)
     return {tags: []}
@@ -86,7 +86,7 @@ class Visitor {
       const tagsDoctrine = resultDoctrine.tags
 
       // Comment-Parser
-      let resultCommentParser = parseCommentParser(comment)[0]
+      let resultCommentParser = parseCommentParser(comment)
 
       let tagsCommentParser
       if (resultCommentParser) {
