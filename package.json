@@ -7,7 +7,7 @@
     "format": "prettier --write .",
     "postversion": "git push --tags && npm publish && git push origin master",
     "test": "mocha \"test/**/*-tests.js\"",
-    "lint": "eslint src test"
+    "lint": "eslint . --fix"
   },
   "dependencies": {
     "@babel/eslint-parser": "^7.12.1",
@@ -25,7 +25,8 @@
   "devDependencies": {
     "mocha": "8.2.1",
     "prettier": "^2.2.1",
-    "should": "13.2.3"
+    "should": "13.2.3",
+    "eslint-config-atomic": "^1.5.1"
   },
   "bin": "./bin/cli.js",
   "files": [
