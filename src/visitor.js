@@ -6,7 +6,7 @@ const { parse } = require("comment-parser/lib")
 const _ = require("lodash")
 
 // a function to add doctorine information into comment-parse tags
-function commentParserToDoctrine(tagDoctrine, tagCommentParser) {
+function injectCommentParserToDoctrine(tagDoctrine, tagCommentParser) {
   const tag = tagDoctrine
 
   // from comment-parser
@@ -70,7 +70,7 @@ class Visitor {
         } else {
           // merge comment parser info into doctorine
           for (let iTag = 0; iTag < tagsDoctrine.length; iTag++) {
-            tagsDoctrine[iTag] = commentParserToDoctrine(tagsDoctrine[iTag], tagsCommentParser[iTag])
+            tagsDoctrine[iTag] = injectCommentParserToDoctrine(tagsDoctrine[iTag], tagsCommentParser[iTag])
           }
         }
       }
