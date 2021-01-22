@@ -25,14 +25,13 @@ function injectDoctrineToCommentParser(tagDoctrine, tagCommentParser) {
   tag["type"] = tagDoctrine.type
 
   // doctrine uses description
-  if (tagCommentParser.description === '') {
+  if (tagCommentParser.description === "") {
     // example: /** @callback promiseMeCoroutine */
-    tag['description'] = tagDoctrine.description // tagCommentParser.name
+    tag["description"] = tagDoctrine.description // tagCommentParser.name
   }
 
   return tag
 }
-
 
 function parseDoctrine(comment) {
   try {
@@ -44,9 +43,9 @@ function parseDoctrine(comment) {
       return `${p1}${p2}`
     })
     return doctrine.parse(commentValueDoctrine, { unwrap: true })
-  } catch(e) {
+  } catch (e) {
     console.warn(e)
-    return {tags: []}
+    return { tags: [] }
   }
 }
 
@@ -55,9 +54,9 @@ function parseCommentParser(comment) {
     // add jsdoc around the comment value so comment-parser can parse it correctly
     const commentValueCommentParser = `/*${comment.value}*/`
     return parse(commentValueCommentParser)[0]
-  } catch(e) {
+  } catch (e) {
     console.warn(e)
-    return {tags: []}
+    return { tags: [] }
   }
 }
 
@@ -95,13 +94,13 @@ class Visitor {
       } else {
         // find typeText manually
         const maybeTypeText = comment.value.match(/@(?:.*)\s+{(.*)}/)
-        let typeText = ''
+        let typeText = ""
         if (maybeTypeText && maybeTypeText.length >= 1) {
           typeText = maybeTypeText[0]
         }
         tagsCommentParser = tagsDoctrine
         for (let iTag = 0; iTag < tagsDoctrine.length; iTag++) {
-          tagsCommentParser[iTag] = injectCommentParserToDoctrine(tagsDoctrine[iTag], {type: typeText})
+          tagsCommentParser[iTag] = injectCommentParserToDoctrine(tagsDoctrine[iTag], { type: typeText })
         }
       }
 
@@ -117,8 +116,8 @@ class Visitor {
         // happens when comment parser supports something but doctorine does not
         // merge comment parser info into doctorine
         for (let iTag = 0; iTag < tagsDoctrine.length; iTag++) {
-          const tagCommentParser =  tagsCommentParser[iTag]
-          tags[iTag] = injectDoctrineToCommentParser({type: tagCommentParser.type}, tagCommentParser)
+          const tagCommentParser = tagsCommentParser[iTag]
+          tags[iTag] = injectDoctrineToCommentParser({ type: tagCommentParser.type }, tagCommentParser)
         }
       }
 
