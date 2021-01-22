@@ -70,7 +70,7 @@ class Visitor {
         } else {
           // merge comment parser info into doctorine
           for (let iTag = 0; iTag < tagsDoctrine.length; iTag++) {
-            tagsDoctrine[iTag] = injectCommentParserToDoctrine(tagsDoctrine[iTag], tagsCommentParser[iTag])
+            tags[iTag] = injectCommentParserToDoctrine(tagsDoctrine[iTag], tagsCommentParser[iTag])
           }
         }
       }
