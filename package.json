@@ -33,6 +33,8 @@
     "bin",
     "src"
   ],
-  "author": "Danny Su <contact@dannysu.com>",
+  "repository": "https://github.com/aminya/jsdoc2flow",
+  "keywords": ["jsdoc2flow", "js2flow", "js-to-flow", "jsdoc-to-flow", "js-to-ts", "js-to-typescript", "jsdoc", "flow", "js2typescript", "js2ts"],
+  "author": "Amin Yahyaabadi <aminyahyaabadi74@gmail.com>, Danny Su <contact@dannysu.com>",
   "license": "MIT"
 }
