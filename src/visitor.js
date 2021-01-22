@@ -9,7 +9,14 @@ const _ = require("lodash")
 function injectCommentParserToDoctrine(tagDoctrine, tagCommentParser) {
   const tag = tagDoctrine
 
-  // from comment-parser
+  if (tagCommentParser) {
+    // from comment-parser
+    tag["typeText"] = tagCommentParser.type
+  }
+
+  return tag
+}
+
   tag["typeText"] = tagCommentParser.type
 
   return tag
