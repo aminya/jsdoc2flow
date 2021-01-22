@@ -6,8 +6,8 @@ const { parse } = require("comment-parser/lib")
 const _ = require("lodash")
 
 // a function to add doctorine information into comment-parse tags
-function commentParserToDoctorine(tagDoctorine, tagCommentParser) {
-  const tag = tagDoctorine
+function commentParserToDoctrine(tagDoctrine, tagCommentParser) {
+  const tag = tagDoctrine
 
   // from comment-parser
   tag["typeText"] = tagCommentParser.type
@@ -15,15 +15,15 @@ function commentParserToDoctorine(tagDoctorine, tagCommentParser) {
   return tag
 }
 
-function parseDoctorine(comment) {
+function parseDoctrine(comment) {
   // doctrine doesn't support default values, so modify the comment
   // value prior to feeding it to doctrine.
-  let commentValueDoctorine = comment.value
+  let commentValueDoctrine = comment.value
   const paramRegExp = /(@param\s+{[^}]+}\s+)\[([^=])+=[^\]]+\]/g
-  commentValueDoctorine = commentValueDoctorine.replace(paramRegExp, (match, p1, p2) => {
+  commentValueDoctrine = commentValueDoctrine.replace(paramRegExp, (match, p1, p2) => {
     return `${p1}${p2}`
   })
-  return doctrine.parse(commentValueDoctorine, { unwrap: true })
+  return doctrine.parse(commentValueDoctrine, { unwrap: true })
 }
 
 function parseCommentParser(comment) {
@@ -51,26 +51,26 @@ class Visitor {
 
     let fixes = []
     for (const comment of newComments) {
-      // Doctorine
-      const resultDoctorine = parseDoctorine(comment)
+      // Doctrine
+      const resultDoctrine = parseDoctrine(comment)
 
       // Comment-Parser
       const resultCommentParser = parseCommentParser(comment)
 
       const tagsCommentParser = resultCommentParser.tags
-      const tagsDoctorine = resultDoctorine.tags
+      const tagsDoctrine = resultDoctrine.tags
 
       // final tags
-      let tags = tagsDoctorine
+      let tags = tagsDoctrine
 
       if (tagsCommentParser) {
-        if (tagsCommentParser.length !== tagsDoctorine.length) {
+        if (tagsCommentParser.length !== tagsDoctrine.length) {
           // happens when comment parser supports something but doctorine does not
-          // console.log({ resultCommentParser, resultDoctorine })
+          // console.log({ resultCommentParser, resultDoctrine })
         } else {
           // merge comment parser info into doctorine
-          for (let iTag = 0; iTag < tagsDoctorine.length; iTag++) {
-            tagsDoctorine[iTag] = commentParserToDoctorine(tagsDoctorine[iTag], tagsCommentParser[iTag])
+          for (let iTag = 0; iTag < tagsDoctrine.length; iTag++) {
+            tagsDoctrine[iTag] = commentParserToDoctrine(tagsDoctrine[iTag], tagsCommentParser[iTag])
           }
         }
       }
