@@ -48,7 +48,7 @@ if (options.file) {
   console.log(modifiedCode)
 } else if ((options.inputDirectory && options.outputDirectory) || (options.inputDirectory && options.overwrite)) {
   const resolvedInputDir = path.resolve(options.inputDirectory)
-  const outputDirectory = (options.overwrite) ? options.inputDirectory : options.outputDirectory
+  const outputDirectory = options.overwrite ? options.inputDirectory : options.outputDirectory
   const resolvedOutputDir = path.resolve(outputDirectory)
 
   fs.mkdirsSync(resolvedOutputDir)
@@ -71,7 +71,7 @@ if (options.file) {
         } else {
           if (path.resolve(entryPath) !== path.resolve(newPath)) {
             log(`Copy ${entryPath} to ${newPath}`)
-            fs.copySync(entryPath, newPath, {overwrite: true})
+            fs.copySync(entryPath, newPath, { overwrite: true })
           }
         }
       }

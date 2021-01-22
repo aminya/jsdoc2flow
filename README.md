@@ -64,6 +64,7 @@ Within a project:
 ## CLI
 
 Update the files in place:
+
 ```
 > jsdoc2flow -i path/to/input/dir --overwrite
 ```
@@ -81,6 +82,7 @@ Convert a directory of files and output to a new location:
 ```
 
 All options:
+
 ```
 Usage: cli [options]
 
@@ -162,7 +164,6 @@ const count = 1;
 /** @type {MyObject} */
 const obj;
 ```
-
 
 ## Inspiration
 
