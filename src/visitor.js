@@ -71,11 +71,11 @@ class Visitor {
     const newComments = []
     let allComments = _.uniq(_.concat(node.leadingComments || [], node.comments || [], node.trailingComments || []))
 
-    for (let iComment = 0, len = allComments.length; iComment < len; iComment++) {
+    for (let iComment = 0; iComment < allComments.length; iComment++) {
       // if there is a line comment in between descard before it
       if (allComments[iComment].type === "Line") {
         allComments = allComments.slice(iComment + 1) // if iComment === len returns []
-        break
+        // recursive
       }
     }
 
