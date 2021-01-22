@@ -27,8 +27,9 @@ function parseDoctrine(comment) {
 }
 
 function parseCommentParser(comment) {
-  const commentValueCommentParser = comment.value.indexOf("*\n") === 0 ? `/*${comment.value}*/` : comment.value
-  return parse(commentValueCommentParser)[0] || []
+  // add jsdoc around the comment value so comment-parser can parse it correctly
+  const commentValueCommentParser = `/*${comment.value}*/`
+  return parse(commentValueCommentParser)
 }
 
 class Visitor {
