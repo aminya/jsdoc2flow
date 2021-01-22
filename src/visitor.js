@@ -9,10 +9,8 @@ const _ = require("lodash")
 function injectCommentParserToDoctrine(tagDoctrine, tagCommentParser) {
   const tag = tagDoctrine
 
-  if (tagCommentParser) {
-    // from comment-parser
-    tag["typeText"] = tagCommentParser.type
-  }
+  // from comment-parser
+  tag["typeText"] = tagCommentParser.type
 
   return tag
 }
@@ -95,10 +93,15 @@ class Visitor {
         // normally
         tagsCommentParser = resultCommentParser.tags
       } else {
-        // fallback to doctrine without typeText
+        // find typeText manually
+        const maybeTypeText = comment.value.match(/@(?:.*)\s+{(.*)}/)
+        let typeText = ''
+        if (maybeTypeText && maybeTypeText.length >= 1) {
+          typeText = maybeTypeText[0]
+        }
         tagsCommentParser = tagsDoctrine
         for (let iTag = 0; iTag < tagsDoctrine.length; iTag++) {
-          tagsCommentParser[iTag] = injectCommentParserToDoctrine(tagsDoctrine[iTag], {})
+          tagsCommentParser[iTag] = injectCommentParserToDoctrine(tagsDoctrine[iTag], {type: typeText})
         }
       }
 
