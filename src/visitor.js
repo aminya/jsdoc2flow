@@ -17,10 +17,24 @@ function injectCommentParserToDoctrine(tagDoctrine, tagCommentParser) {
   return tag
 }
 
+function injectDoctrineToCommentParser(tagDoctrine, tagCommentParser) {
+  const tag = tagCommentParser
+
+  tag["title"] = tagCommentParser.tag
+
+  // use type to store doctrine types and use typeText to store comment-parser type
   tag["typeText"] = tagCommentParser.type
+  tag["type"] = tagDoctrine.type
+
+  // doctrine uses description
+  if (tagCommentParser.description === '') {
+    // example: /** @callback promiseMeCoroutine */
+    tag['description'] = tagDoctrine.description // tagCommentParser.name
+  }
 
   return tag
 }
+
 
 function parseDoctrine(comment) {
   // doctrine doesn't support default values, so modify the comment
