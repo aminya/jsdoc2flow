@@ -6,6 +6,17 @@ const { parse } = require("comment-parser/lib")
 const _ = require("lodash")
 
 
+function parseDoctorine(comment) {
+  // doctrine doesn't support default values, so modify the comment
+  // value prior to feeding it to doctrine.
+  let commentValueDoctorine = comment.value
+  const paramRegExp = /(@param\s+{[^}]+}\s+)\[([^=])+=[^\]]+\]/g
+  commentValueDoctorine = commentValueDoctorine.replace(paramRegExp, (match, p1, p2) => {
+    return `${p1}${p2}`
+  })
+  return doctrine.parse(commentValueDoctorine, { unwrap: true })
+}
+
 function parseCommentParser(comment) {
   const commentValueCommentParser = comment.value.indexOf("*\n") === 0 ? `/*${comment.value}*/` : comment.value
   return parse(commentValueCommentParser)[0] || []
@@ -31,23 +42,19 @@ class Visitor {
 
     let fixes = []
     for (const comment of newComments) {
-      // doctrine doesn't support default values, so modify the comment
-      // value prior to feeding it to doctrine.
-      let commentValue = comment.value
-      const paramRegExp = /(@param\s+{[^}]+}\s+)\[([^=])+=[^\]]+\]/g
-      commentValue = commentValue.replace(paramRegExp, (match, p1, p2) => {
-        return `${p1}${p2}`
-      })
+
+      // Doctorine
+      const resultDoctorine = parseDoctorine(comment)
 
       // Comment-Parser
       const resultCommentParser = parseCommentParser(comment)
 
       const tagsCommentParser = resultCommentParser.tags
+      const tagsDoctorine = resultDoctorine.tags
+
 
       let processedComment = false
 
-      const result = doctrine.parse(commentValue, { unwrap: true })
-      const tags = result.tags
       for (const tag of tags) {
         const fixer = this.fixerIndex.get(tag.title)
         if (!fixer) {
