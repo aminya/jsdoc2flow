@@ -5,6 +5,15 @@ const { parse } = require("comment-parser/lib")
 
 const _ = require("lodash")
 
+// a function to add doctorine information into comment-parse tags
+function commentParserToDoctorine(tagDoctorine, tagCommentParser) {
+  const tag = tagDoctorine
+
+  // from comment-parser
+  tag["typeText"] = tagCommentParser.type
+
+  return tag
+}
 
 function parseDoctorine(comment) {
   // doctrine doesn't support default values, so modify the comment
@@ -42,7 +51,6 @@ class Visitor {
 
     let fixes = []
     for (const comment of newComments) {
-
       // Doctorine
       const resultDoctorine = parseDoctorine(comment)
 
@@ -52,6 +60,20 @@ class Visitor {
       const tagsCommentParser = resultCommentParser.tags
       const tagsDoctorine = resultDoctorine.tags
 
+      // final tags
+      let tags = tagsDoctorine
+
+      if (tagsCommentParser) {
+        if (tagsCommentParser.length !== tagsDoctorine.length) {
+          // happens when comment parser supports something but doctorine does not
+          // console.log({ resultCommentParser, resultDoctorine })
+        } else {
+          // merge comment parser info into doctorine
+          for (let iTag = 0; iTag < tagsDoctorine.length; iTag++) {
+            tagsDoctorine[iTag] = commentParserToDoctorine(tagsDoctorine[iTag], tagsCommentParser[iTag])
+          }
+        }
+      }
 
       let processedComment = false
 
