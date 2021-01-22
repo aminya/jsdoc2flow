@@ -10,7 +10,9 @@
     "lint": "eslint src test"
   },
   "dependencies": {
-    "@babel/parser": "^7.12.11",
+    "@babel/eslint-parser": "^7.12.1",
+    "@babel/plugin-syntax-flow": "^7.12.1",
+    "@babel/plugin-syntax-jsx": "^7.12.1",
     "awilix": "4.3.1",
     "commander": "7.0.0",
     "comment-parser": "^1.1.1",
