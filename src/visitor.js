@@ -69,7 +69,15 @@ class Visitor {
 
   visit(node) {
     const newComments = []
-    const allComments = _.uniq(_.concat(node.leadingComments || [], node.comments || [], node.trailingComments || []))
+    let allComments = _.uniq(_.concat(node.leadingComments || [], node.comments || [], node.trailingComments || []))
+
+    for (let iComment = 0; iComment < allComments.length; iComment++) {
+      // if there is a line comment in between descard before it
+      if (allComments[iComment].type === "Line") {
+        allComments = allComments.slice(iComment + 1) // if iComment === len returns []
+        // recursive
+      }
+    }
 
     allComments.forEach((comment) => {
       const found = this.visitedComments.find((visited) => _.isEqual(comment, visited))

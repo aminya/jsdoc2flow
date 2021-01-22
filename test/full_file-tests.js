@@ -27,4 +27,13 @@ describe("full file", function () {
       isCodeEqual(modifiedCode, expected)
     })
   })
+
+  describe("test3", function () {
+    it("should convert correctly", function () {
+      const code = fs.readFileSync(`${orig}/test3.js`).toString()
+      const modifiedCode = converter.convertSourceCode(code)
+      const expected = fs.readFileSync(`${annotated}/test3.js`).toString()
+      isCodeEqual(modifiedCode, expected)
+    })
+  })
 })
