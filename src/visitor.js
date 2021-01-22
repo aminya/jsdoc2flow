@@ -1,7 +1,15 @@
 "use strict"
 
 const doctrine = require("doctrine")
+const { parse } = require("comment-parser/lib")
+
 const _ = require("lodash")
+
+
+function parseCommentParser(comment) {
+  const commentValueCommentParser = comment.value.indexOf("*\n") === 0 ? `/*${comment.value}*/` : comment.value
+  return parse(commentValueCommentParser)[0] || []
+}
 
 class Visitor {
   constructor({ fixerIndex, sourceCode }) {
@@ -30,6 +38,11 @@ class Visitor {
       commentValue = commentValue.replace(paramRegExp, (match, p1, p2) => {
         return `${p1}${p2}`
       })
+
+      // Comment-Parser
+      const resultCommentParser = parseCommentParser(comment)
+
+      const tagsCommentParser = resultCommentParser.tags
 
       let processedComment = false
 
