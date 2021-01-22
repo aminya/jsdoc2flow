@@ -6,7 +6,7 @@ const { parse } = require("comment-parser/lib")
 const _ = require("lodash")
 
 // a function to add doctorine information into comment-parse tags
-function commentParserToDoctrine(tagDoctrine, tagCommentParser) {
+function injectCommentParserToDoctrine(tagDoctrine, tagCommentParser) {
   const tag = tagDoctrine
 
   // from comment-parser
@@ -15,20 +15,50 @@ function commentParserToDoctrine(tagDoctrine, tagCommentParser) {
   return tag
 }
 
+function injectDoctrineToCommentParser(tagDoctrine, tagCommentParser) {
+  const tag = tagCommentParser
+
+  tag["title"] = tagCommentParser.tag
+
+  // use type to store doctrine types and use typeText to store comment-parser type
+  tag["typeText"] = tagCommentParser.type
+  tag["type"] = tagDoctrine.type
+
+  // doctrine uses description
+  if (tagCommentParser.description === '') {
+    // example: /** @callback promiseMeCoroutine */
+    tag['description'] = tagDoctrine.description // tagCommentParser.name
+  }
+
+  return tag
+}
+
+
 function parseDoctrine(comment) {
-  // doctrine doesn't support default values, so modify the comment
-  // value prior to feeding it to doctrine.
-  let commentValueDoctrine = comment.value
-  const paramRegExp = /(@param\s+{[^}]+}\s+)\[([^=])+=[^\]]+\]/g
-  commentValueDoctrine = commentValueDoctrine.replace(paramRegExp, (match, p1, p2) => {
-    return `${p1}${p2}`
-  })
-  return doctrine.parse(commentValueDoctrine, { unwrap: true })
+  try {
+    // doctrine doesn't support default values, so modify the comment
+    // value prior to feeding it to doctrine.
+    let commentValueDoctrine = comment.value
+    const paramRegExp = /(@param\s+{[^}]+}\s+)\[([^=])+=[^\]]+\]/g
+    commentValueDoctrine = commentValueDoctrine.replace(paramRegExp, (match, p1, p2) => {
+      return `${p1}${p2}`
+    })
+    return doctrine.parse(commentValueDoctrine, { unwrap: true })
+  } catch(e) {
+    console.warn(e)
+    return {tags: []}
+  }
 }
 
 function parseCommentParser(comment) {
-  const commentValueCommentParser = comment.value.indexOf("*\n") === 0 ? `/*${comment.value}*/` : comment.value
-  return parse(commentValueCommentParser)[0] || []
+  try {
+    // add jsdoc around the comment value so comment-parser can parse it correctly
+    const commentValueCommentParser = `/*${comment.value}*/`
+    return parse(commentValueCommentParser)[0]
+  } catch(e) {
+    console.warn(e)
+    return {tags: []}
+  }
 }
 
 class Visitor {
@@ -53,25 +83,42 @@ class Visitor {
     for (const comment of newComments) {
       // Doctrine
       const resultDoctrine = parseDoctrine(comment)
-
-      // Comment-Parser
-      const resultCommentParser = parseCommentParser(comment)
-
-      const tagsCommentParser = resultCommentParser.tags
       const tagsDoctrine = resultDoctrine.tags
 
-      // final tags
-      let tags = tagsDoctrine
+      // Comment-Parser
+      let resultCommentParser = parseCommentParser(comment)
 
-      if (tagsCommentParser) {
-        if (tagsCommentParser.length !== tagsDoctrine.length) {
-          // happens when comment parser supports something but doctorine does not
-          // console.log({ resultCommentParser, resultDoctrine })
-        } else {
-          // merge comment parser info into doctorine
-          for (let iTag = 0; iTag < tagsDoctrine.length; iTag++) {
-            tagsDoctrine[iTag] = commentParserToDoctrine(tagsDoctrine[iTag], tagsCommentParser[iTag])
-          }
+      let tagsCommentParser
+      if (resultCommentParser) {
+        // normally
+        tagsCommentParser = resultCommentParser.tags
+      } else {
+        // find typeText manually
+        const maybeTypeText = comment.value.match(/@(?:.*)\s+{(.*)}/)
+        let typeText = ''
+        if (maybeTypeText && maybeTypeText.length >= 1) {
+          typeText = maybeTypeText[0]
+        }
+        tagsCommentParser = tagsDoctrine
+        for (let iTag = 0; iTag < tagsDoctrine.length; iTag++) {
+          tagsCommentParser[iTag] = injectCommentParserToDoctrine(tagsDoctrine[iTag], {type: typeText})
+        }
+      }
+
+      // final tags
+      let tags = tagsCommentParser
+
+      if (tagsCommentParser.length === tagsDoctrine.length) {
+        // merge comment parser info into doctorine
+        for (let iTag = 0; iTag < tagsDoctrine.length; iTag++) {
+          tags[iTag] = injectDoctrineToCommentParser(tagsDoctrine[iTag], tagsCommentParser[iTag])
+        }
+      } else if (tagsDoctrine.length === 0) {
+        // happens when comment parser supports something but doctorine does not
+        // merge comment parser info into doctorine
+        for (let iTag = 0; iTag < tagsDoctrine.length; iTag++) {
+          const tagCommentParser =  tagsCommentParser[iTag]
+          tags[iTag] = injectDoctrineToCommentParser({type: tagCommentParser.type}, tagCommentParser)
         }
       }
 
