@@ -60,7 +60,7 @@ class Converter {
         })
         ast = espree.parse(code, this.espreeOptions)
       } else {
-        throw e
+        throw new Error(`Failed to parse code: ${e.message}`)
       }
     }
 
