@@ -26,6 +26,10 @@ function literalParse(element) {
 }
 
 function determineVarType(varType) {
+  // non-doctrine comments
+  if (typeof varType === "string") {
+    return varType
+  }
   if (varType.type === "NameExpression") {
     return typeSubstitute(varType.name)
   } else if (varType.type === "TypeApplication") {

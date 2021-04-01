@@ -80,7 +80,7 @@ describe("typedefFixer", function () {
   })
 
   describe("alias simple primitive type via @type", function () {
-    it("should change nothing because doctrine does not support this", function () {
+    it("just assigns to itself because doctrine/comment-parser doesn't support it", function () {
       const code = `
             /**
              * @typedef MyNumber
@@ -91,6 +91,8 @@ describe("typedefFixer", function () {
       isCodeEqual(
         modifiedCode,
         `
+            type MyNumber = MyNumber
+
             /**
              * @typedef MyNumber
              * @type {number}

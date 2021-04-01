@@ -320,7 +320,7 @@ describe("paramFixer", function () {
   })
 
   describe("simple optional name variation 2", function () {
-    it("should do nothing because doctrine does not support it", function () {
+    it("uses comment-parser instead of doctrine", function () {
       const code = `
             /**
              * @param {number} [a]
@@ -335,7 +335,7 @@ describe("paramFixer", function () {
             /**
              * @param {number} [a]
              */
-            function test(a) {
+            function test(a: number) {
             }
             `
       )
