@@ -129,7 +129,7 @@ class Visitor {
           // find the corresponding tag in doctrine
           const tagDoctrine = tagsDoctrine.find(
             (td) => td.title === tagCommentParser.tag && td.name === tagCommentParser.name
-          ) || { type: tagCommentParser.type }
+          ) || { type: tagCommentParser.type || tagCommentParser.name }
 
           tags[iTag] = injectDoctrineToCommentParser(tagDoctrine, tagCommentParser)
         }
