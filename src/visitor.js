@@ -115,18 +115,23 @@ class Visitor {
 
       // final tags
       let tags = tagsCommentParser
-
       if (tagsCommentParser.length === tagsDoctrine.length) {
         // merge comment parser info into doctorine
         for (let iTag = 0; iTag < tagsDoctrine.length; iTag++) {
           tags[iTag] = injectDoctrineToCommentParser(tagsDoctrine[iTag], tagsCommentParser[iTag])
         }
-      } else if (tagsDoctrine.length === 0) {
+      } else {
         // happens when comment parser supports something but doctorine does not
         // merge comment parser info into doctorine
-        for (let iTag = 0; iTag < tagsDoctrine.length; iTag++) {
+        for (let iTag = 0; iTag < tagsCommentParser.length; iTag++) {
           const tagCommentParser = tagsCommentParser[iTag]
-          tags[iTag] = injectDoctrineToCommentParser({ type: tagCommentParser.type }, tagCommentParser)
+
+          // find the corresponding tag in doctrine
+          const tagDoctrine = tagsDoctrine.find(
+            (td) => td.title === tagCommentParser.tag && td.name === tagCommentParser.name
+          ) || { type: tagCommentParser.type }
+
+          tags[iTag] = injectDoctrineToCommentParser(tagDoctrine, tagCommentParser)
         }
       }
 
