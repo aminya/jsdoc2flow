@@ -110,14 +110,13 @@ class Converter {
           plugins: [
             // enable jsx and flow syntax
             "@babel/plugin-syntax-flow",
-            "@babel/plugin-syntax-jsx"
+            "@babel/plugin-syntax-jsx",
           ],
-        }
+        },
       })
-    } catch(e) {
+    } catch (e) {
       console.warn(e)
     }
-
 
     return modifiedCode
   }

@@ -14,5 +14,4 @@
  * @param {number} textOpacity
  * @return {string} a CSS color
  */
-function getDefaultColor(editorElement, textOpacity) {
-}
+function getDefaultColor(editorElement, textOpacity) {}
