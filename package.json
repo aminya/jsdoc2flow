@@ -32,7 +32,8 @@
   "bin": "./bin/cli.js",
   "files": [
     "bin",
-    "src"
+    "src",
+    "vendor"
   ],
   "repository": "https://github.com/aminya/jsdoc2flow",
   "keywords": ["jsdoc2flow", "js2flow", "js-to-flow", "jsdoc-to-flow", "js-to-ts", "js-to-typescript", "jsdoc", "flow", "js2typescript", "js2ts"],
