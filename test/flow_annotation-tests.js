@@ -3,7 +3,7 @@
 const FlowAnnotation = require("../src/flow_annotation.js")
 
 describe("FlowAnnotation", function () {
-  let flowAnnotation = new FlowAnnotation()
+  const flowAnnotation = new FlowAnnotation()
 
   describe("nested object patterns", function () {
     it("", function () {

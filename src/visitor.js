@@ -10,7 +10,7 @@ function injectCommentParserToDoctrine(tagDoctrine, tagCommentParser) {
   const tag = tagDoctrine
 
   // from comment-parser
-  tag["typeText"] = tagCommentParser.type
+  tag.typeText = tagCommentParser.type
 
   return tag
 }
@@ -18,16 +18,16 @@ function injectCommentParserToDoctrine(tagDoctrine, tagCommentParser) {
 function injectDoctrineToCommentParser(tagDoctrine, tagCommentParser) {
   const tag = tagCommentParser
 
-  tag["title"] = tagCommentParser.tag
+  tag.title = tagCommentParser.tag
 
   // use type to store doctrine types and use typeText to store comment-parser type
-  tag["typeText"] = tagCommentParser.type
-  tag["type"] = tagDoctrine.type
+  tag.typeText = tagCommentParser.type
+  tag.type = tagDoctrine.type
 
   // doctrine uses description
   if (tagCommentParser.description === "") {
     // example: /** @callback promiseMeCoroutine */
-    tag["description"] = tagDoctrine.description // tagCommentParser.name
+    tag.description = tagDoctrine.description // tagCommentParser.name
   }
 
   return tag
@@ -38,7 +38,7 @@ function parseDoctrine(comment) {
     // doctrine doesn't support default values, so modify the comment
     // value prior to feeding it to doctrine.
     let commentValueDoctrine = comment.value
-    const paramRegExp = /(@param\s+{[^}]+}\s+)\[([^=])+=[^\]]+\]/g
+    const paramRegExp = /(@param\s+{[^}]+}\s+)\[([^=])+=[^\]]+]/g
     commentValueDoctrine = commentValueDoctrine.replace(paramRegExp, (match, p1, p2) => {
       return `${p1}${p2}`
     })
@@ -69,7 +69,7 @@ class Visitor {
 
   visit(node) {
     const newComments = []
-    let allComments = _.uniq(_.concat(node.leadingComments || [], node.comments || [], node.trailingComments || []))
+    const allComments = _.uniq(_.concat(node.leadingComments || [], node.comments || [], node.trailingComments || []))
 
     // find a way to detect doc string that is related to commented code
     // for (let iComment = 0; iComment < allComments.length; iComment++) {
@@ -94,7 +94,7 @@ class Visitor {
       const tagsDoctrine = resultDoctrine.tags
 
       // Comment-Parser
-      let resultCommentParser = parseCommentParser(comment)
+      const resultCommentParser = parseCommentParser(comment)
 
       let tagsCommentParser
       if (resultCommentParser) {
@@ -102,7 +102,7 @@ class Visitor {
         tagsCommentParser = resultCommentParser.tags
       } else {
         // find typeText manually
-        const maybeTypeText = comment.value.match(/@(?:.*)\s+{(.*)}/)
+        const maybeTypeText = comment.value.match(/@.*\s+{(.*)}/)
         let typeText = ""
         if (maybeTypeText && maybeTypeText.length >= 1) {
           typeText = maybeTypeText[0]
@@ -114,7 +114,7 @@ class Visitor {
       }
 
       // final tags
-      let tags = tagsCommentParser
+      const tags = tagsCommentParser
       if (tagsCommentParser.length === tagsDoctrine.length) {
         // merge comment parser info into doctorine
         for (let iTag = 0; iTag < tagsDoctrine.length; iTag++) {
@@ -144,9 +144,9 @@ class Visitor {
         }
 
         const context = {
-          comment: comment,
+          comment,
           code: this.sourceCode,
-          tags: tags,
+          tags,
         }
         const newFixes = fixer.getFixes(tag, node, context)
         fixes = _.concat(fixes, newFixes)

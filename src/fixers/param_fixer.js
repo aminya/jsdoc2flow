@@ -10,7 +10,7 @@ class ParamFixer {
   getFixes(tag, node, { comment, tags }) {
     const fixes = []
 
-    let tagName = tag.name
+    const tagName = tag.name
     let params = node.params
 
     // ObjectPattern requires special logic. The individual property names
@@ -64,7 +64,7 @@ class ParamFixer {
     }
 
     const idGroups = this._getIdentifiersFromTags(tags)
-    let idGroup = idGroups[tagName]
+    const idGroup = idGroups[tagName]
 
     // Each param potentially needs further unwrapping. For example, you
     // can provide default values for a parameter. When that happens, the
@@ -156,7 +156,7 @@ class ParamFixer {
         continue
       }
 
-      if (groupName && tag.name.startsWith(groupName + ".")) {
+      if (groupName && tag.name.startsWith(`${groupName}.`)) {
         const nameParts = tag.name.split(".")
         const id = nameParts[nameParts.length - 1]
         groups[groupName].ids.push(id)

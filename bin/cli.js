@@ -32,7 +32,7 @@ program
 program.parse(process.argv)
 const options = program.opts()
 
-options.ext = options.ext.map((e) => (e.startsWith(".") ? e : "." + e))
+options.ext = options.ext.map((e) => (e.startsWith(".") ? e : `.${e}`))
 
 let log = () => {}
 if (options.verbose) {

@@ -84,8 +84,8 @@ class FlowAnnotation {
       addition = `${this.inlinePre}: ${type}${this.inlinePost}`
     }
     return {
-      start: start,
-      addition: addition,
+      start,
+      addition,
     }
   }
 
@@ -98,7 +98,7 @@ class FlowAnnotation {
     const props = lines.join("\n")
 
     return {
-      start: start,
+      start,
       addition: `\n${classIndent}${this.blockPre}\n${props}\n${classIndent}${this.blockPost}`,
     }
   }
@@ -118,8 +118,8 @@ class FlowAnnotation {
 
     addition = `${this.inlinePre}: { ${result.type} }${this.inlinePost}`
     return {
-      start: start,
-      addition: addition,
+      start,
+      addition,
     }
   }
 
@@ -178,8 +178,8 @@ class FlowAnnotation {
       lines.push(`${indent}type ${name} = (${props.join(", ")}) => ${returnType};`)
       lines.push(`${indent}${this.blockPost}`)
       return {
-        start: start,
-        addition: lines.join("\n") + `\n${indent}`,
+        start,
+        addition: `${lines.join("\n")}\n${indent}`,
       }
     } else {
       const type = determineVarType(varType)
@@ -196,15 +196,15 @@ class FlowAnnotation {
         lines.push(`${indent}};`)
         lines.push(`${indent}${this.blockPost}`)
         return {
-          start: start,
-          addition: lines.join("\n") + `\n${indent}`,
+          start,
+          addition: `${lines.join("\n")}\n${indent}`,
         }
       } else {
         return {
-          start: start,
-          addition:
-            [`${this.blockPre}`, `${indent}type ${name} = ${type};`, `${indent}${this.blockPost}`].join("\n") +
-            `\n${indent}`,
+          start,
+          addition: `${[`${this.blockPre}`, `${indent}type ${name} = ${type};`, `${indent}${this.blockPost}`].join(
+            "\n"
+          )}\n${indent}`,
         }
       }
     }
