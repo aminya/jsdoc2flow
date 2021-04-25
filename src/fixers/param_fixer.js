@@ -28,10 +28,10 @@ class ParamFixer {
     // FunctionExpression that might be embedded within a VariableDeclaration
     if (
       node.type !== "FunctionDeclaration" &&
-      node.type != "VariableDeclaration" &&
-      node.type != "MethodDefinition" &&
-      node.type != "Property" &&
-      node.type != "ExpressionStatement"
+      node.type !== "VariableDeclaration" &&
+      node.type !== "MethodDefinition" &&
+      node.type !== "Property" &&
+      node.type !== "ExpressionStatement"
     ) {
       return fixes
     }
