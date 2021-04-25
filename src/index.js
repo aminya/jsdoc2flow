@@ -5,14 +5,21 @@ const linter = new Linter()
 const _ = require("lodash")
 const { createContainer, Lifetime, asValue } = require("awilix")
 const babelParser = require("@babel/eslint-parser")
+const { attachComments } = require("../vendor/estree-util-attach-comments.js")
 
 const visitorKeys = require("./visitor_keys.js")
+
+function parseAndAttachComment(code, espreeOptions) {
+  const ast = espree.parse(code, espreeOptions)
+  attachComments(ast, ast.comments)
+  return ast
+}
 
 class Converter {
   constructor(options = {}) {
     this.espreeOptions = {
-      attachComment: true,
-      ecmaVersion: options.ecmaVersion || 2019,
+      comment: true,
+      ecmaVersion: options.ecmaVersion || 2021,
       sourceType: options.sourceType || "module",
       ecmaFeatures: options.ecmaFeatures || {
         // enable JSX parsing
@@ -45,24 +52,7 @@ class Converter {
       code = code.replace(regExp, "")
     }
 
-    let ast
-    let dynamicImportPatch = false
-    try {
-      ast = espree.parse(code, this.espreeOptions)
-    } catch (e) {
-      if (e.message.indexOf("Unexpected token import") >= 0) {
-        dynamicImportPatch = true
-        // We cannot update espree because attachComment option is removed, so to support `dynamic imports`,
-        // we need to do this hack
-        const dynamicImportRegExp = /import\s*\((.*)\)/
-        code = code.replace(dynamicImportRegExp, (importGroup, valueGroup) => {
-          return `ESPREE_DYNAMIC_IMPORT(${valueGroup})`
-        })
-        ast = espree.parse(code, this.espreeOptions)
-      } else {
-        throw new Error(`Failed to parse code: ${e.message}`)
-      }
-    }
+    let ast = parseAndAttachComment(code, this.espreeOptions)
 
     if (!this.options.flowCommentSyntax) {
       // Add arrow parens so we can add types
@@ -77,7 +67,7 @@ class Converter {
       if (message.fixed) {
         code = message.output
         // reparse
-        ast = espree.parse(code, this.espreeOptions)
+        ast = parseAndAttachComment(code, this.espreeOptions)
       }
     }
 
@@ -91,13 +81,6 @@ class Converter {
     if (matches) {
       // Put back the first line if it was stripped out before.
       modifiedCode = `${matches[1]}${modifiedCode}`
-    }
-
-    if (dynamicImportPatch) {
-      const dynamicImportRegExp = /ESPREE_DYNAMIC_IMPORT\s*\((.*)\)/
-      modifiedCode = modifiedCode.replace(dynamicImportRegExp, (importGroup, valueGroup) => {
-        return `import(${valueGroup})`
-      })
     }
 
     // Check if the generated code is valid
