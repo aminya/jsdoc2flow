@@ -23,10 +23,11 @@
     "lodash": "4.17.20"
   },
   "devDependencies": {
+    "eslint-config-atomic": "^1.5.1",
+    "eslint-visitor-keys": "^2.0.0",
     "mocha": "8.2.1",
     "prettier": "^2.2.1",
-    "should": "13.2.3",
-    "eslint-config-atomic": "^1.5.1"
+    "should": "13.2.3"
   },
   "bin": "./bin/cli.js",
   "files": [
@@ -35,7 +36,18 @@
     "vendor"
   ],
   "repository": "https://github.com/aminya/jsdoc2flow",
-  "keywords": ["jsdoc2flow", "js2flow", "js-to-flow", "jsdoc-to-flow", "js-to-ts", "js-to-typescript", "jsdoc", "flow", "js2typescript", "js2ts"],
+  "keywords": [
+    "jsdoc2flow",
+    "js2flow",
+    "js-to-flow",
+    "jsdoc-to-flow",
+    "js-to-ts",
+    "js-to-typescript",
+    "jsdoc",
+    "flow",
+    "js2typescript",
+    "js2ts"
+  ],
   "author": "Amin Yahyaabadi <aminyahyaabadi74@gmail.com>, Danny Su <contact@dannysu.com>",
   "license": "MIT"
 }

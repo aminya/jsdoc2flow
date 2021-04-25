@@ -1,6 +1,6 @@
 const fs = require("fs")
 const espree = require("espree-attachcomment")
-const visitorKeys = require("espree-attachcomment/lib/visitor-keys")
+const visitorKeys = require("eslint-visitor-keys").KEYS
 const { Linter } = require("eslint")
 const linter = new Linter()
 const _ = require("lodash")
