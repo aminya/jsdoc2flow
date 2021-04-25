@@ -1,5 +1,6 @@
 const fs = require("fs")
 const espree = require("espree")
+const visitorKeys = require("espree/lib/visitor-keys")
 const { Linter } = require("eslint")
 const linter = new Linter()
 const _ = require("lodash")
@@ -7,7 +8,6 @@ const { createContainer, Lifetime, asValue } = require("awilix")
 const babelParser = require("@babel/eslint-parser")
 const { attachComments } = require("../vendor/estree-util-attach-comments.js")
 
-const visitorKeys = require("./visitor_keys.js")
 
 function parseAndAttachComment(code, espreeOptions) {
   const ast = espree.parse(code, espreeOptions)
