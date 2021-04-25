@@ -59,6 +59,7 @@ class ReturnsFixer {
     for (let i = blockStatementNode.start; i >= node.start; i--) {
       if (code[i] === ")") {
         endBracketIndex = i
+        break
       }
     }
 
