@@ -1,6 +1,6 @@
 {
   "name": "jsdoc2flow",
-  "version": "0.12.1",
+  "version": "0.13.0",
   "description": "Convert JSDoc comments into Flow annotations",
   "main": "src/index.js",
   "scripts": {
