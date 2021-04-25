@@ -7,6 +7,56 @@ const _ = require("lodash")
 const { createContainer, Lifetime, asValue } = require("awilix")
 const babelParser = require("@babel/eslint-parser")
 
+class Converter {
+  constructor(options = {}) {
+    this.espreeOptions = {
+      comment: true,
+      attachComment: true,
+      ecmaVersion: options.ecmaVersion || 2021,
+      sourceType: options.sourceType || "module",
+      ecmaFeatures: options.ecmaFeatures || {
+        // enable JSX parsing
+        jsx: true,
+      },
+    }
+    this.options = options
+
+    this.container = _createContainer(options)
+  }
+
+  convertFile(inputFilePath, outputFilePath) {
+    const code = fs.readFileSync(inputFilePath).toString()
+    const modifiedCode = this.convertSourceCode(code)
+    fs.writeFileSync(outputFilePath, modifiedCode)
+
+    // Retain the same permissions
+    const fstat = fs.lstatSync(inputFilePath)
+    fs.chmodSync(outputFilePath, fstat.mode)
+  }
+
+  convertSourceCode(givenCode) {
+    const { code, matches } = prepareCode(givenCode, this.espreeOptions, this.flowCommentSyntax)
+
+    const ast = espree.parse(code, this.espreeOptions)
+
+    const scope = this.container.createScope()
+    scope.register({ sourceCode: asValue(code) })
+    const visitor = scope.cradle.visitor
+    let fixes = []
+    _traverseAST(ast, (n) => (fixes = _.concat(fixes, visitor.visit(n))))
+
+    let modifiedCode = _applyFixes(code, fixes)
+    modifiedCode = postProcessCode(modifiedCode, matches)
+
+    if (this.options.validate !== false) {
+      validateCode(modifiedCode, this.espreeOptions)
+    }
+
+    return modifiedCode
+  }
+}
+module.exports = Converter
+
 function prepareCode(givenCode, espreeOptions, flowCommentSyntax) {
   let code = givenCode
 
@@ -59,63 +109,13 @@ function validateCode(modifiedCode, espreeOptions) {
 
 function postProcessCode(modifiedCode, matches) {
   let finalCode = modifiedCode
-  
+
   // Put back the first line if it was stripped out before.
   if (matches) {
     finalCode = `${matches[1]}${finalCode}`
   }
   return finalCode
 }
-
-class Converter {
-  constructor(options = {}) {
-    this.espreeOptions = {
-      comment: true,
-      attachComment: true,
-      ecmaVersion: options.ecmaVersion || 2021,
-      sourceType: options.sourceType || "module",
-      ecmaFeatures: options.ecmaFeatures || {
-        // enable JSX parsing
-        jsx: true,
-      },
-    }
-    this.options = options
-
-    this.container = _createContainer(options)
-  }
-
-  convertFile(inputFilePath, outputFilePath) {
-    const code = fs.readFileSync(inputFilePath).toString()
-    const modifiedCode = this.convertSourceCode(code)
-    fs.writeFileSync(outputFilePath, modifiedCode)
-
-    // Retain the same permissions
-    const fstat = fs.lstatSync(inputFilePath)
-    fs.chmodSync(outputFilePath, fstat.mode)
-  }
-
-  convertSourceCode(givenCode) {
-    const { code, matches } = prepareCode(givenCode, this.espreeOptions, this.flowCommentSyntax)
-
-    const ast = espree.parse(code, this.espreeOptions)
-
-    const scope = this.container.createScope()
-    scope.register({ sourceCode: asValue(code) })
-    const visitor = scope.cradle.visitor
-    let fixes = []
-    _traverseAST(ast, (n) => (fixes = _.concat(fixes, visitor.visit(n))))
-
-    let modifiedCode = _applyFixes(code, fixes)
-    modifiedCode = postProcessCode(modifiedCode, matches)
-
-    if (this.options.validate !== false) {
-      validateCode(modifiedCode, this.espreeOptions)
-    }
-
-    return modifiedCode
-  }
-}
-module.exports = Converter
 
 function _traverseAST(ast, visit) {
   const stack = [ast]
