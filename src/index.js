@@ -7,6 +7,36 @@ const _ = require("lodash")
 const { createContainer, Lifetime, asValue } = require("awilix")
 const babelParser = require("@babel/eslint-parser")
 
+function prepareCode(givenCode, espreeOptions, flowCommentSyntax) {
+  let code = givenCode
+
+  // Check to see if this code is being used as a script.
+  // i.e. first line having something like `#!/usr/bin/env node`
+  //
+  // If it is, strip it out before trying to parse it.
+  const regExp = /^(#![^\n]+\n)/
+  const matches = code.match(regExp)
+  if (matches) {
+    code = code.replace(regExp, "")
+  }
+
+  // Add arrow parens so we can add types
+  if (!flowCommentSyntax) {
+    const message = linter.verifyAndFix(code, {
+      parser: "espree",
+      parserOptions: espreeOptions,
+      rules: {
+        "arrow-parens": 2,
+      },
+      fix: true,
+    })
+    if (message.fixed) {
+      code = message.output
+    }
+  }
+  return { code, matches }
+}
+
 class Converter {
   constructor(options = {}) {
     this.espreeOptions = {
@@ -35,36 +65,10 @@ class Converter {
   }
 
   convertSourceCode(givenCode) {
-    let code = givenCode
-    // Check to see if this code is being used as a script.
-    // i.e. first line having something like `#!/usr/bin/env node`
-    //
-    // If it is, strip it out before trying to parse it.
-    const regExp = /^(#![^\n]+\n)/
-    const matches = code.match(regExp)
-    if (matches) {
-      code = code.replace(regExp, "")
-    }
+    const { code, matches } = prepareCode(givenCode, this.espreeOptions, this.flowCommentSyntax)
 
-    let ast = espree.parse(code, this.espreeOptions)
-
-    if (!this.options.flowCommentSyntax) {
-      // Add arrow parens so we can add types
-      const message = linter.verifyAndFix(code, {
-        parser: "espree",
-        parserOptions: this.espreeOptions,
-        rules: {
-          "arrow-parens": 2,
-        },
-        fix: true,
-      })
-      if (message.fixed) {
-        code = message.output
-        // reparse
-        ast = espree.parse(code, this.espreeOptions)
-      }
-    }
-
+    const ast = espree.parse(code, this.espreeOptions)
+    
     const scope = this.container.createScope()
     scope.register({ sourceCode: asValue(code) })
     const visitor = scope.cradle.visitor
