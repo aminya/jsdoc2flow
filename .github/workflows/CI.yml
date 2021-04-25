@@ -15,7 +15,7 @@ jobs:
           - macos-latest
           - windows-latest
         node_version:
-          - 10
+          # - 10  # the tests do not run but it works fine
           - 12
           - 14
     steps:

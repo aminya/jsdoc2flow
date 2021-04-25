@@ -34,11 +34,6 @@ const options = program.opts()
 
 options.ext = options.ext.map((e) => (e.startsWith(".") ? e : `.${e}`))
 
-let log = () => {}
-if (options.verbose) {
-  log = console.log
-}
-
 const Converter = require("../src")
 const converter = new Converter()
 
@@ -66,11 +61,11 @@ if (options.file) {
         const newPath = path.join(outputDirectory, entryPath.replace(resolvedInputDir, ""))
         fs.mkdirsSync(path.parse(newPath).dir)
         if (options.ext.includes(entryPathObj.ext)) {
-          log(`Convert ${entryPath} to ${newPath}`)
+          console.log(`Convert ${entryPath} to ${newPath}`)
           converter.convertFile(entryPath, newPath)
         } else {
           if (path.resolve(entryPath) !== path.resolve(newPath)) {
-            log(`Copy ${entryPath} to ${newPath}`)
+            console.log(`Copy ${entryPath} to ${newPath}`)
             fs.copySync(entryPath, newPath, { overwrite: true })
           }
         }

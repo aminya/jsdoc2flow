@@ -49,6 +49,21 @@ function parseDoctrine(comment) {
   }
 }
 
+/** Comments on ES exported functions/variables should be used for the actual declaration */
+function addCommentToDeclaration(node) {
+  if (node.declaration && (node.type === "ExportNamedDeclaration" || node.type === "ExportDefaultDeclaration")) {
+    if (node.leadingComments) {
+      node.declaration.leadingComments = node.leadingComments
+    } else if (node.trailingComments) {
+      node.declaration.trailingComments = node.trailingComments
+    } else if (node.comments) {
+      node.declaration.comments = node.comments
+    }
+    return true
+  }
+  return false
+}
+
 function parseCommentParser(comment) {
   try {
     // add jsdoc around the comment value so comment-parser can parse it correctly
@@ -68,6 +83,9 @@ class Visitor {
   }
 
   visit(node) {
+    if (addCommentToDeclaration(node)) {
+      return []
+    }
     const newComments = []
     const allComments = _.uniq(_.concat(node.leadingComments || [], node.comments || [], node.trailingComments || []))
 
