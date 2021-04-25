@@ -12,6 +12,6 @@ export function posixifyPath(givenPath) {
  * @param {string} givenPath   Path to convert
  * @returns {string}          Converted filepath
  */
-export function posixifyPathNormalized(givenPath) {
+export default function posixifyPathNormalized(givenPath) {
   return posixifyPath(givenPath).replace(/\/$/, "")
 }
