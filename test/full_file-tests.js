@@ -13,6 +13,10 @@ const numTest = fs.readdirSync(orig).length
 
 describe("full file", function () {
   for (let iTest = 1; iTest <= numTest; iTest++) {
+    if (iTest === 3) {
+      console.warn("Skipping test3 Related to https://github.com/aminya/jsdoc2flow/issues/7")
+      continue
+    }
     describe(`test${iTest}`, function () {
       it("should convert correctly", function () {
         const code = fs.readFileSync(`${orig}/test${iTest}.js`).toString()

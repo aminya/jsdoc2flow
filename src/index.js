@@ -1,24 +1,17 @@
 const fs = require("fs")
-const espree = require("espree")
-const visitorKeys = require("espree/lib/visitor-keys")
+const espree = require("espree-attachcomment")
+const visitorKeys = require("eslint-visitor-keys").KEYS
 const { Linter } = require("eslint")
 const linter = new Linter()
 const _ = require("lodash")
 const { createContainer, Lifetime, asValue } = require("awilix")
 const babelParser = require("@babel/eslint-parser")
-const { attachComments } = require("../vendor/estree-util-attach-comments.js")
-
-
-function parseAndAttachComment(code, espreeOptions) {
-  const ast = espree.parse(code, espreeOptions)
-  attachComments(ast, ast.comments)
-  return ast
-}
 
 class Converter {
   constructor(options = {}) {
     this.espreeOptions = {
       comment: true,
+      attachComment: true,
       ecmaVersion: options.ecmaVersion || 2021,
       sourceType: options.sourceType || "module",
       ecmaFeatures: options.ecmaFeatures || {
@@ -52,7 +45,7 @@ class Converter {
       code = code.replace(regExp, "")
     }
 
-    let ast = parseAndAttachComment(code, this.espreeOptions)
+    let ast = espree.parse(code, this.espreeOptions)
 
     if (!this.options.flowCommentSyntax) {
       // Add arrow parens so we can add types
@@ -67,7 +60,7 @@ class Converter {
       if (message.fixed) {
         code = message.output
         // reparse
-        ast = parseAndAttachComment(code, this.espreeOptions)
+        ast = espree.parse(code, this.espreeOptions)
       }
     }
 
