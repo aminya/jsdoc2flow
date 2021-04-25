@@ -37,6 +37,26 @@ function prepareCode(givenCode, espreeOptions, flowCommentSyntax) {
   return { code, matches }
 }
 
+function validateCode(modifiedCode, espreeOptions) {
+  // Check if the generated code is valid
+  try {
+    babelParser.parse(modifiedCode, {
+      ...espreeOptions,
+      requireConfigFile: false,
+      allowImportExportEverywhere: true,
+      babelOptions: {
+        plugins: [
+          // enable jsx and flow syntax
+          "@babel/plugin-syntax-flow",
+          "@babel/plugin-syntax-jsx",
+        ],
+      },
+    })
+  } catch (e) {
+    console.warn(e)
+  }
+}
+
 class Converter {
   constructor(options = {}) {
     this.espreeOptions = {
@@ -68,7 +88,7 @@ class Converter {
     const { code, matches } = prepareCode(givenCode, this.espreeOptions, this.flowCommentSyntax)
 
     const ast = espree.parse(code, this.espreeOptions)
-    
+
     const scope = this.container.createScope()
     scope.register({ sourceCode: asValue(code) })
     const visitor = scope.cradle.visitor
@@ -81,22 +101,8 @@ class Converter {
       modifiedCode = `${matches[1]}${modifiedCode}`
     }
 
-    // Check if the generated code is valid
-    try {
-      babelParser.parse(modifiedCode, {
-        ...this.espreeOptions,
-        requireConfigFile: false,
-        allowImportExportEverywhere: true,
-        babelOptions: {
-          plugins: [
-            // enable jsx and flow syntax
-            "@babel/plugin-syntax-flow",
-            "@babel/plugin-syntax-jsx",
-          ],
-        },
-      })
-    } catch (e) {
-      console.warn(e)
+    if (this.options.validate !== false) {
+      validateCode(modifiedCode, this.espreeOptions)
     }
 
     return modifiedCode
