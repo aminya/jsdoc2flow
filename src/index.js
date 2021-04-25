@@ -45,14 +45,14 @@ class Converter {
     let fixes = []
     _traverseAST(ast, (n) => (fixes = _.concat(fixes, visitor.visit(n))))
 
-    let modifiedCode = _applyFixes(code, fixes)
-    modifiedCode = postProcessCode(modifiedCode, matches)
+    const modifiedCode = _applyFixes(code, fixes)
+    const finalCode = postProcessCode(modifiedCode, matches)
 
     if (this.options.validate !== false) {
-      validateCode(modifiedCode, this.espreeOptions)
+      validateCode(finalCode, this.espreeOptions)
     }
 
-    return modifiedCode
+    return finalCode
   }
 }
 module.exports = Converter
