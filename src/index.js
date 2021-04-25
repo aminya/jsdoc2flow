@@ -34,7 +34,8 @@ class Converter {
     fs.chmodSync(outputFilePath, fstat.mode)
   }
 
-  convertSourceCode(code) {
+  convertSourceCode(givenCode) {
+    let code = givenCode
     // Check to see if this code is being used as a script.
     // i.e. first line having something like `#!/usr/bin/env node`
     //
