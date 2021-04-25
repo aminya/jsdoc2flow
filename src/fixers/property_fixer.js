@@ -10,7 +10,7 @@ class PropertyFixer {
   getFixes(tag, node, { tags, code, comment }) {
     const fixes = []
 
-    if (node.type != "ClassDeclaration") {
+    if (node.type !== "ClassDeclaration") {
       return fixes
     }
 

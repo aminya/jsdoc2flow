@@ -8,7 +8,7 @@ class TypeFixer {
   getFixes(tag, node, { comment }) {
     const fixes = []
 
-    if (node.type != "VariableDeclaration") {
+    if (node.type !== "VariableDeclaration") {
       return fixes
     }
 

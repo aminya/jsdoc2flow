@@ -1,4 +1,6 @@
+/* eslint-disable-next-line import/no-unassigned-import */
 require("should")
+/* eslint-disable-next-line import/no-extraneous-dependencies */
 const { format } = require("prettier")
 
 const prettierOption = { semi: true, parser: "babel" }

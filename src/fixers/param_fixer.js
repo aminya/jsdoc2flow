@@ -28,10 +28,10 @@ class ParamFixer {
     // FunctionExpression that might be embedded within a VariableDeclaration
     if (
       node.type !== "FunctionDeclaration" &&
-      node.type != "VariableDeclaration" &&
-      node.type != "MethodDefinition" &&
-      node.type != "Property" &&
-      node.type != "ExpressionStatement"
+      node.type !== "VariableDeclaration" &&
+      node.type !== "MethodDefinition" &&
+      node.type !== "Property" &&
+      node.type !== "ExpressionStatement"
     ) {
       return fixes
     }
@@ -63,7 +63,7 @@ class ParamFixer {
       params = node.expression.right.params
     }
 
-    const idGroups = this._getIdentifiersFromTags(tags)
+    const idGroups = _getIdentifiersFromTags(tags)
     const idGroup = idGroups[tagName]
 
     // Each param potentially needs further unwrapping. For example, you
@@ -97,7 +97,7 @@ class ParamFixer {
           // ObjectPattern is special and a bit more complicated
 
           // Collect all the Identifiers within this ObjectPattern
-          const ids = this._getIdentifiersFromObjectPattern(n)
+          const ids = _getIdentifiersFromObjectPattern(n)
 
           const diff = _.difference(
             ids.map((i) => i.id),
@@ -116,61 +116,61 @@ class ParamFixer {
 
     return fixes
   }
-
-  _getIdentifiersFromObjectPattern(objPattern) {
-    const ids = []
-    const stack = [objPattern]
-    const visitedNodes = []
-    while (stack.length) {
-      const node = stack.pop()
-      const alreadyVisited = visitedNodes.some((visitedNode) => _.isEqual(node, visitedNode))
-      if (alreadyVisited) {
-        continue
-      }
-      visitedNodes.push(node)
-
-      if (node.type === "Identifier") {
-        ids.push({ id: node.name, hasDefault: false })
-      } else if (node.type === "AssignmentPattern") {
-        if (node.left.type === "Identifier") {
-          ids.push({ id: node.left.name, hasDefault: true })
-        } else {
-          stack.push(node.left)
-        }
-      } else if (node.type === "ObjectPattern") {
-        for (const prop of node.properties) {
-          stack.push(prop.key)
-          stack.push(prop.value)
-        }
-      }
-    }
-    return ids
-  }
-
-  _getIdentifiersFromTags(tags) {
-    const groups = {}
-
-    let groupName = null
-    for (const tag of tags) {
-      if (!tag.type || (tag.title !== "param" && tag.title !== "arg" && tag.title !== "argument")) {
-        continue
-      }
-
-      if (groupName && tag.name.startsWith(`${groupName}.`)) {
-        const nameParts = tag.name.split(".")
-        const id = nameParts[nameParts.length - 1]
-        groups[groupName].ids.push(id)
-        groups[groupName].children.push(tag)
-      } else if (tag.type.type === "NameExpression" && tag.type.name.toLowerCase() === "object") {
-        groups[tag.name] = {
-          ids: [],
-          children: [],
-        }
-        groupName = tag.name
-      }
-    }
-
-    return groups
-  }
 }
 module.exports = ParamFixer
+
+function _getIdentifiersFromObjectPattern(objPattern) {
+  const ids = []
+  const stack = [objPattern]
+  const visitedNodes = []
+  while (stack.length) {
+    const node = stack.pop()
+    const alreadyVisited = visitedNodes.some((visitedNode) => _.isEqual(node, visitedNode))
+    if (alreadyVisited) {
+      continue
+    }
+    visitedNodes.push(node)
+
+    if (node.type === "Identifier") {
+      ids.push({ id: node.name, hasDefault: false })
+    } else if (node.type === "AssignmentPattern") {
+      if (node.left.type === "Identifier") {
+        ids.push({ id: node.left.name, hasDefault: true })
+      } else {
+        stack.push(node.left)
+      }
+    } else if (node.type === "ObjectPattern") {
+      for (const prop of node.properties) {
+        stack.push(prop.key)
+        stack.push(prop.value)
+      }
+    }
+  }
+  return ids
+}
+
+function _getIdentifiersFromTags(tags) {
+  const groups = {}
+
+  let groupName = null
+  for (const tag of tags) {
+    if (!tag.type || (tag.title !== "param" && tag.title !== "arg" && tag.title !== "argument")) {
+      continue
+    }
+
+    if (groupName && tag.name.startsWith(`${groupName}.`)) {
+      const nameParts = tag.name.split(".")
+      const id = nameParts[nameParts.length - 1]
+      groups[groupName].ids.push(id)
+      groups[groupName].children.push(tag)
+    } else if (tag.type.type === "NameExpression" && tag.type.name.toLowerCase() === "object") {
+      groups[tag.name] = {
+        ids: [],
+        children: [],
+      }
+      groupName = tag.name
+    }
+  }
+
+  return groups
+}
