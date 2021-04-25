@@ -57,6 +57,16 @@ function validateCode(modifiedCode, espreeOptions) {
   }
 }
 
+function postProcessCode(modifiedCode, matches) {
+  let finalCode = modifiedCode
+  
+  // Put back the first line if it was stripped out before.
+  if (matches) {
+    finalCode = `${matches[1]}${finalCode}`
+  }
+  return finalCode
+}
+
 class Converter {
   constructor(options = {}) {
     this.espreeOptions = {
@@ -96,10 +106,7 @@ class Converter {
     _traverseAST(ast, (n) => (fixes = _.concat(fixes, visitor.visit(n))))
 
     let modifiedCode = _applyFixes(code, fixes)
-    if (matches) {
-      // Put back the first line if it was stripped out before.
-      modifiedCode = `${matches[1]}${modifiedCode}`
-    }
+    modifiedCode = postProcessCode(modifiedCode, matches)
 
     if (this.options.validate !== false) {
       validateCode(modifiedCode, this.espreeOptions)
