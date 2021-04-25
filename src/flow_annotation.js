@@ -137,7 +137,7 @@ class FlowAnnotation {
       }
 
       let name = nameParts[nameParts.length - 1]
-      const idEntry = ids.find((i) => i.id === name)
+      const idEntry = ids.find((iID) => iID.id === name)
       if (type.startsWith("?")) {
         name += "?"
       }
