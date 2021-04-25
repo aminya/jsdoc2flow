@@ -9,31 +9,17 @@ const converter = new Converter()
 const orig = `${__dirname}/fixtures/orig`
 const annotated = `${__dirname}/fixtures/annotated`
 
+const numTest = fs.readdirSync(orig).length
+
 describe("full file", function () {
-  describe("test1", function () {
-    it("should convert correctly", function () {
-      const code = fs.readFileSync(`${orig}/test1.js`).toString()
-      const modifiedCode = converter.convertSourceCode(code)
-      const expected = fs.readFileSync(`${annotated}/test1.js`).toString()
-      isCodeEqual(modifiedCode, expected)
+  for (let iTest = 1; iTest <= numTest; iTest++) {
+    describe(`test${iTest}`, function () {
+      it("should convert correctly", function () {
+        const code = fs.readFileSync(`${orig}/test${iTest}.js`).toString()
+        const modifiedCode = converter.convertSourceCode(code)
+        const expected = fs.readFileSync(`${annotated}/test${iTest}.js`).toString()
+        isCodeEqual(modifiedCode, expected)
+      })
     })
-  })
-
-  describe("test2", function () {
-    it("should convert correctly", function () {
-      const code = fs.readFileSync(`${orig}/test2.js`).toString()
-      const modifiedCode = converter.convertSourceCode(code)
-      const expected = fs.readFileSync(`${annotated}/test2.js`).toString()
-      isCodeEqual(modifiedCode, expected)
-    })
-  })
-
-  // describe("test3", function () {
-  //   it("should convert correctly", function () {
-  //     const code = fs.readFileSync(`${orig}/test3.js`).toString()
-  //     const modifiedCode = converter.convertSourceCode(code)
-  //     const expected = fs.readFileSync(`${annotated}/test3.js`).toString()
-  //     isCodeEqual(modifiedCode, expected)
-  //   })
-  // })
+  }
 })
