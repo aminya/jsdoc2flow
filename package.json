@@ -1,6 +1,6 @@
 {
   "name": "jsdoc2flow",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Convert JSDoc comments into Flow/Typescript annotations",
   "main": "src/index.js",
   "scripts": {
@@ -38,6 +38,7 @@
     "vendor"
   ],
   "repository": "https://github.com/aminya/jsdoc2flow",
+  "homepage": "https://github.com/aminya/jsdoc2flow",
   "keywords": [
     "jsdoc2flow",
     "js2flow",
