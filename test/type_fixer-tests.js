@@ -1,8 +1,6 @@
-"use strict"
+import { isCodeEqual } from "./helper.js"
 
-const { isCodeEqual } = require("./helper")
-
-const Converter = require("../src")
+import Converter from "../src/index.js"
 const converter = new Converter()
 
 describe("typeFixer", function () {

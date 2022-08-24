@@ -9,7 +9,7 @@
     "test": "mocha \"test/**/*-tests.js\"",
     "lint": "eslint . --fix"
   },
-  "type": "commonjs",
+  "type": "module",
   "prettier": "prettier-config-atomic",
   "dependencies": {
     "@babel/eslint-parser": "^7.18.9",
@@ -38,6 +38,7 @@
     "vendor"
   ],
   "repository": "https://github.com/aminya/jsdoc2flow",
+  "homepage": "https://github.com/aminya/jsdoc2flow",
   "keywords": [
     "jsdoc2flow",
     "js2flow",

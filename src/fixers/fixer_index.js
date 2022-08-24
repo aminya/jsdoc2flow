@@ -1,6 +1,4 @@
-"use strict"
-
-class FixerIndex {
+export default class FixerIndex {
   constructor({ paramFixer, returnsFixer, typedefFixer, typeFixer, callbackFixer, propertyFixer }) {
     this.fixers = {}
 
@@ -31,4 +29,3 @@ class FixerIndex {
     return this.fixers[`@${type}`]
   }
 }
-module.exports = FixerIndex

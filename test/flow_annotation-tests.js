@@ -1,6 +1,4 @@
-"use strict"
-
-const FlowAnnotation = require("../src/flow_annotation.js")
+import FlowAnnotation from "../src/flow_annotation.js"
 
 describe("FlowAnnotation", function () {
   const flowAnnotation = new FlowAnnotation()

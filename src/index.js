@@ -1,11 +1,11 @@
-const fs = require("fs")
-const espree = require("espree-attachcomment")
-const visitorKeys = require("eslint-visitor-keys").KEYS
-const { Linter } = require("eslint")
+import { readFileSync, writeFileSync, lstatSync, chmodSync } from "fs"
+import { parse } from "espree-attachcomment"
+import { KEYS as visitorKeys } from "eslint-visitor-keys"
+import { Linter } from "eslint"
 const linter = new Linter()
-const _ = require("lodash")
-const { createContainer, Lifetime, asValue } = require("awilix")
-const babelParser = require("@babel/eslint-parser")
+import { concat } from "lodash"
+import { createContainer, Lifetime, asValue } from "awilix"
+import { parse as _parse } from "@babel/eslint-parser"
 
 class Converter {
   constructor(options = {}) {
@@ -25,25 +25,25 @@ class Converter {
   }
 
   convertFile(inputFilePath, outputFilePath) {
-    const code = fs.readFileSync(inputFilePath).toString()
+    const code = readFileSync(inputFilePath).toString()
     const modifiedCode = this.convertSourceCode(code)
-    fs.writeFileSync(outputFilePath, modifiedCode)
+    writeFileSync(outputFilePath, modifiedCode)
 
     // Retain the same permissions
-    const fstat = fs.lstatSync(inputFilePath)
-    fs.chmodSync(outputFilePath, fstat.mode)
+    const fstat = lstatSync(inputFilePath)
+    chmodSync(outputFilePath, fstat.mode)
   }
 
   convertSourceCode(givenCode) {
     const { code, matches } = prepareCode(givenCode, this.espreeOptions, this.flowCommentSyntax)
 
-    const ast = espree.parse(code, this.espreeOptions)
+    const ast = parse(code, this.espreeOptions)
 
     const scope = this.container.createScope()
     scope.register({ sourceCode: asValue(code) })
     const visitor = scope.cradle.visitor
     let fixes = []
-    _traverseAST(ast, (n) => (fixes = _.concat(fixes, visitor.visit(n))))
+    _traverseAST(ast, (n) => (fixes = concat(fixes, visitor.visit(n))))
 
     const modifiedCode = _applyFixes(code, fixes)
     const finalCode = postProcessCode(modifiedCode, matches)
@@ -55,7 +55,7 @@ class Converter {
     return finalCode
   }
 }
-module.exports = Converter
+export default Converter
 
 function prepareCode(givenCode, espreeOptions, flowCommentSyntax) {
   let code = givenCode
@@ -90,7 +90,7 @@ function prepareCode(givenCode, espreeOptions, flowCommentSyntax) {
 function validateCode(modifiedCode, espreeOptions) {
   // Check if the generated code is valid
   try {
-    babelParser.parse(modifiedCode, {
+    _parse(modifiedCode, {
       ...espreeOptions,
       requireConfigFile: false,
       allowImportExportEverywhere: true,

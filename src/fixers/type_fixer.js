@@ -1,6 +1,4 @@
-"use strict"
-
-class TypeFixer {
+export default class TypeFixer {
   constructor({ flowAnnotation }) {
     this.flowAnnotation = flowAnnotation
   }
@@ -29,4 +27,3 @@ class TypeFixer {
     return fixes
   }
 }
-module.exports = TypeFixer

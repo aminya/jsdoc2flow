@@ -1,6 +1,4 @@
-"use strict"
-
-class CallbackFixer {
+export default class CallbackFixer {
   constructor({ flowAnnotation }) {
     this.flowAnnotation = flowAnnotation
   }
@@ -35,4 +33,3 @@ class CallbackFixer {
     return fixes
   }
 }
-module.exports = CallbackFixer

@@ -1,9 +1,7 @@
-"use strict"
+import { parse as _parse } from "doctrine"
+import { parse } from "comment-parser"
 
-const doctrine = require("doctrine")
-const { parse } = require("comment-parser")
-
-const _ = require("lodash")
+import { uniq, concat, isEqual } from "lodash"
 
 // a function to add doctorine information into comment-parse tags
 function injectCommentParserToDoctrine(tagDoctrine, tagCommentParser) {
@@ -42,7 +40,7 @@ function parseDoctrine(comment) {
     commentValueDoctrine = commentValueDoctrine.replace(paramRegExp, (match, p1, p2) => {
       return `${p1}${p2}`
     })
-    return doctrine.parse(commentValueDoctrine, { unwrap: true })
+    return _parse(commentValueDoctrine, { unwrap: true })
   } catch (e) {
     console.warn(e)
     return { tags: [] }
@@ -87,7 +85,7 @@ class Visitor {
       return []
     }
     const newComments = []
-    const allComments = _.uniq(_.concat(node.leadingComments || [], node.comments || [], node.trailingComments || []))
+    const allComments = uniq(concat(node.leadingComments || [], node.comments || [], node.trailingComments || []))
 
     // find a way to detect doc string that is related to commented code
     // for (let iComment = 0; iComment < allComments.length; iComment++) {
@@ -99,7 +97,7 @@ class Visitor {
     // }
 
     allComments.forEach((comment) => {
-      const found = this.visitedComments.find((visited) => _.isEqual(comment, visited))
+      const found = this.visitedComments.find((visited) => isEqual(comment, visited))
       if (!found) {
         newComments.push(comment)
       }
@@ -167,7 +165,7 @@ class Visitor {
           tags,
         }
         const newFixes = fixer.getFixes(tag, node, context)
-        fixes = _.concat(fixes, newFixes)
+        fixes = concat(fixes, newFixes)
 
         if (newFixes.length) {
           processedComment = true
@@ -182,4 +180,4 @@ class Visitor {
     return fixes
   }
 }
-module.exports = Visitor
+export default Visitor

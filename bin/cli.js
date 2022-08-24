@@ -2,22 +2,19 @@
 
 /* eslint-disable no-console */
 
-"use strict"
+import { readFileSync, mkdirsSync, readdirSync, lstatSync, copySync } from "fs-extra"
+import { resolve, join, parse } from "path"
+import { version, option, parse as _parse, opts, outputHelp } from "commander"
+import { version as _version } from "../package.json"
 
-const fs = require("fs-extra")
-const path = require("path")
-const program = require("commander")
-const packageJson = require("../package.json")
-
-program.version(packageJson.version)
+version(_version)
 
 function collect(val, list) {
   list.push(val)
   return list
 }
 
-program
-  .option("-f, --file <file>", "The file to convert and output to stdout")
+option("-f, --file <file>", "The file to convert and output to stdout")
   .option("-i, --input-directory <dir>", "Source directory for original files")
   .option("-w, --overwrite", "Overwrite the original files")
   .option("-o, --output-directory <dir>", "Destination directory for converted files")
@@ -29,44 +26,44 @@ program
   )
   .option("-v, --verbose", "Verbose output")
 
-program.parse(process.argv)
-const options = program.opts()
+_parse(process.argv)
+const options = opts()
 
 options.ext = options.ext.map((e) => (e.startsWith(".") ? e : `.${e}`))
 
-const Converter = require("../src")
+import Converter from "../src/index.js"
 const converter = new Converter()
 
 if (options.file) {
-  const code = fs.readFileSync(options.file).toString()
+  const code = readFileSync(options.file).toString()
   const modifiedCode = converter.convertSourceCode(code)
   console.log(modifiedCode)
 } else if ((options.inputDirectory && options.outputDirectory) || (options.inputDirectory && options.overwrite)) {
-  const resolvedInputDir = path.resolve(options.inputDirectory)
+  const resolvedInputDir = resolve(options.inputDirectory)
   const outputDirectory = options.overwrite ? options.inputDirectory : options.outputDirectory
-  const resolvedOutputDir = path.resolve(outputDirectory)
+  const resolvedOutputDir = resolve(outputDirectory)
 
-  fs.mkdirsSync(resolvedOutputDir)
+  mkdirsSync(resolvedOutputDir)
   const stack = [resolvedInputDir]
   while (stack.length) {
     const basePath = stack.pop()
-    const entries = fs.readdirSync(basePath)
+    const entries = readdirSync(basePath)
     for (const entry of entries) {
-      const entryPath = path.join(basePath, entry)
-      const entryInfo = fs.lstatSync(entryPath)
-      const entryPathObj = path.parse(entryPath)
+      const entryPath = join(basePath, entry)
+      const entryInfo = lstatSync(entryPath)
+      const entryPathObj = parse(entryPath)
       if (entryInfo.isDirectory()) {
         stack.push(entryPath)
       } else {
-        const newPath = path.join(outputDirectory, entryPath.replace(resolvedInputDir, ""))
-        fs.mkdirsSync(path.parse(newPath).dir)
+        const newPath = join(outputDirectory, entryPath.replace(resolvedInputDir, ""))
+        mkdirsSync(parse(newPath).dir)
         if (options.ext.includes(entryPathObj.ext)) {
           console.log(`Convert ${entryPath} to ${newPath}`)
           converter.convertFile(entryPath, newPath)
         } else {
-          if (path.resolve(entryPath) !== path.resolve(newPath)) {
+          if (resolve(entryPath) !== resolve(newPath)) {
             console.log(`Copy ${entryPath} to ${newPath}`)
-            fs.copySync(entryPath, newPath, { overwrite: true })
+            copySync(entryPath, newPath, { overwrite: true })
           }
         }
       }
@@ -74,5 +71,5 @@ if (options.file) {
   }
 } else {
   console.log("Unkown cli parameters. Use the following options:")
-  program.outputHelp()
+  outputHelp()
 }

@@ -1,8 +1,6 @@
-"use strict"
+import * as _ from "lodash"
 
-const _ = require("lodash")
-
-class ParamFixer {
+export default class ParamFixer {
   constructor({ flowAnnotation }) {
     this.flowAnnotation = flowAnnotation
   }
@@ -117,7 +115,6 @@ class ParamFixer {
     return fixes
   }
 }
-module.exports = ParamFixer
 
 function _getIdentifiersFromObjectPattern(objPattern) {
   const ids = []

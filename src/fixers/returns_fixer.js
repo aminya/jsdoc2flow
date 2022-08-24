@@ -1,6 +1,4 @@
-"use strict"
-
-class ReturnsFixer {
+export default class ReturnsFixer {
   constructor({ flowAnnotation }) {
     this.flowAnnotation = flowAnnotation
   }
@@ -73,4 +71,3 @@ class ReturnsFixer {
     return fixes
   }
 }
-module.exports = ReturnsFixer

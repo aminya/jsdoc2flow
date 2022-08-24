@@ -1,5 +1,3 @@
-"use strict"
-
 function typeSubstitute(typeName) {
   if (typeName !== undefined && typeName.toLowerCase() === "object") {
     return "{}"
@@ -59,7 +57,7 @@ function determineVarType(varType) {
     `)
 }
 
-class FlowAnnotation {
+export default class FlowAnnotation {
   constructor({ useFlowCommentSyntax = false } = {}) {
     if (useFlowCommentSyntax) {
       this.inlinePre = " /*"
@@ -210,4 +208,3 @@ class FlowAnnotation {
     }
   }
 }
-module.exports = FlowAnnotation

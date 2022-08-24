@@ -1,8 +1,6 @@
-"use strict"
+import { repeat } from "lodash"
 
-const _ = require("lodash")
-
-class PropertyFixer {
+export default class PropertyFixer {
   constructor({ flowAnnotation }) {
     this.flowAnnotation = flowAnnotation
   }
@@ -35,11 +33,10 @@ class PropertyFixer {
         break
       }
     }
-    const classIndent = _.repeat(" ", node.start - 1 - lineStart)
+    const classIndent = repeat(" ", node.start - 1 - lineStart)
 
     fixes.push(this.flowAnnotation.inlineProps(node.body.start + 1, classIndent, tags))
 
     return fixes
   }
 }
-module.exports = PropertyFixer
