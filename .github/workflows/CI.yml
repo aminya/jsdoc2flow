@@ -15,14 +15,13 @@ jobs:
           - macos-latest
           - windows-latest
         node_version:
-          # - 10  # the tests do not run but it works fine
           - 12
-          - 14
+          - 18
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Cache node_modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: node_modules
         with:
@@ -30,7 +29,7 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.node_version }}-${{ matrix.node_arch }}-${{ hashFiles('package.json') }}
 
       - name: Install Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node_version }}
 
@@ -42,10 +41,3 @@ jobs:
 
       - name: Tests
         run: npm run test
-
-  Skip:
-    if: contains(github.event.head_commit.message, '[skip ci]')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Skip CI 🚫
-        run: echo skip ci
