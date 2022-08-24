@@ -51,5 +51,8 @@
     "js2ts"
   ],
   "author": "Amin Yahyaabadi <aminyahyaabadi74@gmail.com>, Danny Su <contact@dannysu.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": "^18 || ^17 || ^16 || ^14.17 || ^12.22"
+  }
 }
