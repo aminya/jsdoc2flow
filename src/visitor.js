@@ -1,7 +1,7 @@
 "use strict"
 
 const doctrine = require("doctrine")
-const { parse } = require("comment-parser/lib")
+const { parse } = require("comment-parser")
 
 const _ = require("lodash")
 
