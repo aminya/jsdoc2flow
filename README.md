@@ -1,6 +1,6 @@
 # jsdoc2flow
 
-Convert JSDoc comments into Flow annotations
+Convert JSDoc comments into Flow/Typescript annotations
 
 ![CI](https://github.com/dannysu/jsdoc2flow/workflows/CI/badge.svg)
 
@@ -98,9 +98,11 @@ Options:
   -h, --help                    display help for command
 ```
 
+After conversion to Flow, you can convert your code to TypeScript using [`@khanacademy/flow-to-ts`](https://www.npmjs.com/package/@khanacademy/flow-to-ts)
+
 ## API
 
-```javascript
+```js
 const Converter = require("jsdoc2flow")
 const converter = new Converter(opts)
 
@@ -130,15 +132,13 @@ You can document using `@typedef` to define custom types:
 
 - Alias
 
-```
-/**
- * @typedef {number} MyNumber
- */
+```js
+/** @typedef {number} MyNumber */
 ```
 
 - Custom Object
 
-```
+```js
 /**
  * @typedef {object} MyObject
  * @property {string} str
@@ -148,7 +148,7 @@ You can document using `@typedef` to define custom types:
 
 For callback and functions, you can use `@callback`:
 
-```
+```js
 /**
  * @callback MyCallback
  * @param {number} arg1
@@ -158,7 +158,7 @@ For callback and functions, you can use `@callback`:
 
 ## @type Annotation
 
-```
+```js
 /** @type {number} */
 const count = 1;
 /** @type {MyObject} */

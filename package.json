@@ -1,7 +1,7 @@
 {
   "name": "jsdoc2flow",
-  "version": "0.13.2",
-  "description": "Convert JSDoc comments into Flow annotations",
+  "version": "1.0.0",
+  "description": "Convert JSDoc comments into Flow/Typescript annotations",
   "main": "src/index.js",
   "scripts": {
     "format": "prettier --write .",
@@ -48,7 +48,11 @@
     "jsdoc",
     "flow",
     "js2typescript",
-    "js2ts"
+    "js2ts",
+    "typescript",
+    "ts",
+    "dts",
+    "dts-gen"
   ],
   "author": "Amin Yahyaabadi <aminyahyaabadi74@gmail.com>, Danny Su <contact@dannysu.com>",
   "license": "MIT",
